@@ -22,6 +22,17 @@
         "login": true,
         "login_username": "danauerbach",
         "login_password": "dockerPW!18"
+      },
+      {
+        "type": "docker-tag",
+        "repository": "projectida/nrts-builder-image",
+        "tag": "latest"
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_username": "danauerbach",
+        "login_password": "dockerPW!18"
       }
     ]
   ]
