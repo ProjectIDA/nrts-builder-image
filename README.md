@@ -1,4 +1,4 @@
-# nrts-build-image
+# nrts-builder-image
 
 Build docker image used to compile NRTS binaries
 
@@ -12,13 +12,13 @@ Build docker image used to compile NRTS binaries
 
 ### Run Packer to build and provision docker image based on Amazon Linux 2 AMI (**nrtsbuild-ami-builder.json**)
 
-4. Validate packer build config file **nrtsbuild-ami-builder.json**
-5. Run packer build config file **nrtsbuild-ami-builder.json**
+4. Validate packer build config file **build-nrts-builder-image.json**
+5. Run packer build config file **build-nrts-builder-image.json**
 >
 > - Use **docker** build based on **amazonlinux:2** image
-> - Use **ansible** to provision (**nrts_build-prov.yml**)
+> - Use **ansible** to provision (**prov-nrts-builder-image.yml**)
 >
 ### Run Packer post-processors
 
-6. _docker-tag_ with for dockerhub repo: **projectida/nrts-builder**
+6. _docker-tag_ with timestamp for dockerhub repo: **projectida/nrts-builder-image**
 7. _docker-push_ to save image on dockerhub.
