@@ -19,7 +19,7 @@ jobs:
             sudo mv /tmp/packer/* /usr/local/
       - run: 
           name: Validate Packer config
-          command: /usr/local/packer validate nrts-builder.json
+          command: /usr/local/packer validate nrtsbuild-ami-builder.json
       - run:
           name: Build docker image
-          command: /usr/local/packer build nrts-builder.json
+          command: /usr/local/packer build nrtsbuild-ami-builder.json
