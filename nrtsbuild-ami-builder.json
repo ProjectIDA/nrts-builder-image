@@ -15,7 +15,7 @@
       {
         "type": "docker-tag",
         "repository": "projectida/nrts-packer",
-        "tag": "latest"
+        "tag": "{{user `IMAGETAG`}}"
       },
       {
         "type": "docker-push",
