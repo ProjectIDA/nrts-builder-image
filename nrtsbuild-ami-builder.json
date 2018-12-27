@@ -1,0 +1,28 @@
+{
+  "builders": [{
+    "type": "docker",
+    "image": "amazonlinux:2",
+    "commit": "true"
+  }],
+ "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "nrtsbuild-prov.yml"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "projectida/nrts-packer",
+        "tag": "latest"
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_username": "danauerbach",
+        "login_password": "dockerPW!18"
+      }
+    ]
+  ]
+}
