@@ -27,7 +27,7 @@ jobs:
             sudo apt-get install ansible
       - run: 
           name: Validate Packer config
-          command: /usr/local/packer validate nrtsbuild-ami-builder.json
+          command: /usr/local/packer validate build-nrts-builder-image.json
       - run:
           name: Build docker image
-          command: /usr/local/packer build -var "IMAGETAG=`date +%Y%m%dT%H%M%S%Z`" nrtsbuild-ami-builder.json 
+          command: /usr/local/packer build -var "IMAGETAG=`date +%Y%m%dT%H%M%S%Z`" build-nrts-builder-image.json 
