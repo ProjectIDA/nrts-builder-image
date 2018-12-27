@@ -1,6 +1,6 @@
 # nrts-builder-image
 
-Build docker image used to compile NRTS binaries
+Build docker image used to compile NRTS binaries and push to docker.io
 
 ## Steps
 
