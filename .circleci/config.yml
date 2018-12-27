@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    environment:
+        PACKER_VER: 1.2.5
+    machine:
+      enabled: true
+      image: circleci/classic:latest
+    steps:
+      - run:
+          name: Install unzip
+          command: sudo apt-get install -y unzip
+      - checkout
+      - run:
+          name: Install packer
+          command: |
+            curl -L -o /tmp/packer-$PACKER_VER.zip https://releases.hashicorp.com/packer/1.2.5/packer_1.2.5_linux_amd64.zip
+            unzip /tmp/packer-$PACKER_VER.zip -d /tmp/packer
+            sudo mv /tmp/packer/* /usr/local/
+      - run: 
+          name: Validate Packer config
+          command: /usr/local/packer validate nrts-builder.json
+      - run:
+          name: Build docker image
+          command: /usr/local/packer build nrts-builder.json
