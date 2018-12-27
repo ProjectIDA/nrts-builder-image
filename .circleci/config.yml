@@ -30,4 +30,4 @@ jobs:
           command: /usr/local/packer validate nrtsbuild-ami-builder.json
       - run:
           name: Build docker image
-          command: /usr/local/packer build nrtsbuild-ami-builder.json -var "IMAGETAG=`date +%Y%m%dT%H%M%S%z`"
+          command: /usr/local/packer build -var "IMAGETAG=`date +%Y%m%dT%H%M%S%z`" nrtsbuild-ami-builder.json 
