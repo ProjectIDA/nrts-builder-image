@@ -41,7 +41,11 @@
       state: latest
 
   - name: check python version
-    shell: |
-        python --version
-        aws --version
+    shell: python --version
+
+  - name: install aws cli
+    shell: pip install awscli 
+
+  - name: check aws cli version
+    shell: aws --version
 
