@@ -1,6 +1,10 @@
 # nrts-builder-image
 
-Build docker image used to compile NRTS binaries and push to docker.io
+Use circleci.com to build a docker image based on AWS AMI Linux Version 2. 
+
+## Description
+
+Using .circleci/config.yml, CircleCI will spin up generic Ubuntu Linux VM used to build an **amazonlinux:2** docker image customized for building the NRTS data acqusition software stack. CicrleCI will install in this VM zip, packer and ansible used to create the final Docker AMI image. CircleCI then runs pack (with packer file __build-nrts-builder-image.json__) which in turn uses ansible (with ansible playbook __prov-nrts-builder-image.yml__) to provision the AMI Docker image. Packer then pushes the provisioned image to Docker.io.
 
 ## Steps
 
