@@ -3,9 +3,8 @@ jobs:
   build:
     environment:
         PACKER_VER: 1.6.4
-    machine:
-      enabled: true
-      image: cimg/base
+    docker:
+      - image: cimg/base:2020.01
     steps:
       - run:
           name: Install unzip
