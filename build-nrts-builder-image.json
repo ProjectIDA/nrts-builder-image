@@ -18,6 +18,11 @@
         "tag": "{{user `IMAGETAG`}}"
       },
       {
+        "type": "docker-tag",
+        "repository": "projectida/nrts-builder-image",
+        "tag": "latest"
+      },
+      {
         "type": "docker-push",
         "login": true,
         "login_username": "danauerbach",
