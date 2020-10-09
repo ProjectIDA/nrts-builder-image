@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/python:3.9.0
+      - image: circleci/python:3.9.0
         environment:
           PACKER_VER: 1.6.4
     steps:
