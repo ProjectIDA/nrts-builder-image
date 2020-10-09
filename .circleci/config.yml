@@ -33,5 +33,10 @@ jobs:
           name: Validate Packer config
           command: /usr/local/packer validate build-nrts-hub-ec2-ami.json
       - run:
+          name: check vars
+          command: |
+            echo $aws_access_key_id
+            echo $aws_secret_access_key
+      - run:
           name: Build docker image
-          command: /usr/local/packer build -var "IMAGETAG=`date +%Y%m%dT%H%M%S%Z`" -var "DOCKERPW=$DOCKERPW" -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-nrts-hub-ec2-ami.json 
+          command: /usr/local/packer build -var "IMAGETAG=`date +%Y%m%dT%H%M%S%Z`" -var "DOCKERPW=$DOCKERPW" -var "AWSKEY=$aws_access_key_id" -var "AWSSECRET=$aws_secret_access_key" build-nrts-hub-ec2-ami.json 
