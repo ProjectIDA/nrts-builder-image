@@ -23,9 +23,9 @@ jobs:
       - run:
           name: Install software-properties-common
           command: sudo apt-get install software-properties-common
-      - run:
-          name: Add Ansible repo
-          command: sudo apt-add-repository --yes ppa:ansible/ansible
+      # - run:
+      #     name: Add Ansible repo
+      #     command: sudo apt-add-repository --yes ppa:ansible/ansible
       - run:
           name: Install Ansible
           command: sudo apt-get install ansible
