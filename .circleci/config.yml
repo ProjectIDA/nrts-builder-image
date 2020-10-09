@@ -14,8 +14,8 @@ jobs:
           name: Install packer
           command: |
             echo $PACKER_VER
-            curl -L -o /tmp/packer-$PACKER_VER.zip https://releases.hashicorp.com/packer/$PACKER_VER/packer_$PACKER_VER_linux_amd64.zip
-            unzip /tmp/packer-$PACKER_VER.zip -d /tmp/packer
+            curl -L -o /tmp/packer-${PACKER_VER}.zip https://releases.hashicorp.com/packer/${PACKER_VER}/packer_${PACKER_VER}_linux_amd64.zip
+            unzip /tmp/packer-${PACKER_VER}.zip -d /tmp/packer
             sudo mv /tmp/packer/* /usr/local/
       - run:
           name: Install ansible
