@@ -9,7 +9,7 @@
 
   - name: install make
     yum:
-      name: {{ item }} 
+      name: "{{ item }}"
       state: latest
       update_cache: yes
     become: true
