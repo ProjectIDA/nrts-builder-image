@@ -23,7 +23,7 @@
         "source_ami_filter": {
             "filters": {
                 "virtualization-type": "hvm",
-                "name": "Amazon Linux 2",
+                "name": "Amazon Linux 2*",
                 "root-device-type": "ebs"
             },
             "owners": ["863634277693"],
