@@ -18,13 +18,17 @@ jobs:
             unzip /tmp/packer-${PACKER_VER}.zip -d /tmp/packer
             sudo mv /tmp/packer/* /usr/local/
       - run:
-          name: Install ansible
-          command: |
-            sudo apt-get update
-            sudo apt-get install software-properties-common
-            sudo apt-add-repository --yes ppa:ansible/ansible
-            sudo apt-get update
-            sudo apt-get install ansible
+          name: apt-get Update
+          command: sudo apt-get update
+      - run:
+          name: Install software-properties-common
+          commnd: sudo apt-get install software-properties-common
+      - run:
+          name: Add Ansible repo
+          command: sudo apt-add-repository --yes ppa:ansible/ansible
+      - run:
+          name: Install Ansible
+          command: sudo apt-get install ansible
       - run: 
           name: Validate Packer config
           command: /usr/local/packer validate build-nrts-hub-ec2-ami.json
