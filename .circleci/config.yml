@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/base:2020.01
+      - image: cimg/python:3.9.0
         environment:
           PACKER_VER: 1.6.4
     steps:
@@ -13,7 +13,7 @@ jobs:
       - run:
           name: Install packer
           command: |
-            echo $PACKER_VER
+            python --version
             curl -L -o /tmp/packer-${PACKER_VER}.zip https://releases.hashicorp.com/packer/${PACKER_VER}/packer_${PACKER_VER}_linux_amd64.zip
             unzip /tmp/packer-${PACKER_VER}.zip -d /tmp/packer
             sudo mv /tmp/packer/* /usr/local/
