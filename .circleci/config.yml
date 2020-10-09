@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: cimg/base:2020.01
-      environment:
+        environment:
           PACKER_VER: 1.6.4
     steps:
       - run:
