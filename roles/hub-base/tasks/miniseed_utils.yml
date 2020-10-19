@@ -64,17 +64,16 @@
 
 - name: download miniseed/ringserver utilities from github.com
   get_url:
-    remote_src: yes
-    src: "{{ item.url }}"
+    url: "{{ item }}"
     dest: "{{ build_root }}/"
     group: nrts
     owner: nrts
     mode: 0644
   loop:
-    - { url: "https://github.com/iris-edu/dataselect/archive/v3.22.tar.gz" }
-    - { url: "https://github.com/iris-edu/msi/archive/v3.8.tar.gz" }
-    - { url: "https://github.com/iris-edu/ringserver/archive/v2020.075.tar.gz" }
-    - { url: "https://github.com/iris-edu/slinktool/archive/v4.3.tar.gz" }
+    - "https://github.com/iris-edu/dataselect/archive/v3.22.tar.gz"
+    - "https://github.com/iris-edu/msi/archive/v3.8.tar.gz"
+    - "https://github.com/iris-edu/ringserver/archive/v2020.075.tar.gz"
+    - "https://github.com/iris-edu/slinktool/archive/v4.3.tar.gz"
   become: yes
   tags:
     - miniseed
