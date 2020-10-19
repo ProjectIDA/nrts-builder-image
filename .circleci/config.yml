@@ -35,11 +35,11 @@ jobs:
           name: check ansible version
           command: ansible-playbook --version
       - run: 
-          name: Validate Packer config
+          name: Validate aws ami config
           command: /usr/local/packer validate  -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-nrts-hub-ec2-ami.json
       - run:
-          name: Build docker image
-          command: /usr/local/packer build -var "IMAGETAG=`date +%Y%m%dT%H%M%S%Z`" -var "DOCKERPW=$DOCKERPW" -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-nrts-hub-ec2-ami.json 
+          name: Build aws ami image
+          command: /usr/local/packer build -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-nrts-hub-ec2-ami.json 
 
 
 #          "owners": ["863634277693"],
