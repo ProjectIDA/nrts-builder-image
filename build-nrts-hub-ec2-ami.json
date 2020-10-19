@@ -41,7 +41,8 @@
         "type": "ansible",
         "extra_arguments": [ "--extra-vars", 
             "home_location=/home git_branch=master",
-            "--tags base"
+            "--tags",
+            "base"
         ],
         "playbook_file": "./prov-nrts-builder-image.yml"
     }]
