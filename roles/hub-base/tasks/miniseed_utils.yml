@@ -1,0 +1,222 @@
+# - name: create Ringserver directories
+#   file:
+#     path: "{{ ringserver_location }}/{{ item }}"
+#     state: directory
+#     owner: nrts
+#     group: nrts
+#     mode: 0775
+#   become: true
+#   loop: 
+#     - SeedLink
+#     - SeedLink/ring
+#     - SeedLink/bin
+#     - SeedLink/log
+
+# - name: install ring.conf
+#   template:
+#     src: ring.conf.j2
+#     dest: "{{ ringserver_location }}/SeedLink/ring.conf"
+#     owner: nrts
+#     group: nrts
+#     mode: 0644
+#   become: true
+
+# - name: make sure build dir exists
+#   file:
+#     path: "{{ build_root }}"
+#     state: directory
+#   become: true
+#   tags:
+#     - miniseed
+
+# - name: deploy seedlink and miniseed binaries to SeedLink/bin
+#   copy:
+#     src: "{{ ringserver_location }}/build/{{ item }}"
+#     dest: "{{ ringserver_location }}/SeedLink/bin/"
+#     owner: nrts
+#     group: nrts
+#     mode: 755
+#     remote_src: yes
+#   loop:
+#     - { src: github-verison, build_dir: msi-3.8/msi }
+#     - ringserver-2018.078/ringserver
+#     - slinktool-4.3/slinktool
+#   become: yes
+#   become_method: su
+#   become_user: nrts
+
+# - name: download miniseed/ringserver utilities from github.com
+#   get_url:
+#     url: "{{ item.url }}"
+#     dest: "{{ build_root }}/build/"
+#     group: nrts
+#     owner: nrts
+#     mode: 0644
+#   loop:
+#     - { url: "https://github.com/iris-edu/dataselect/archive/v3.22.tar.gz" }
+#     - { url: "https://github.com/iris-edu/msi/archive/v3.8.tar.gz" }
+#     - { url: "https://github.com/iris-edu/ringserver/archive/v2020.075.tar.gz" }
+#     - { url: "https://github.com/iris-edu/slinktool/archive/v4.3.tar.gz" }
+#   become_user: nrts
+#   become: yes
+#   tags:
+#     - miniseed
+
+- name: download miniseed/ringserver utilities from github.com
+  unarchive:
+    remote_src: yes
+    src: "{{ item.url }}"
+    dest: "{{ build_root }}/"
+    # group: nrts
+    # owner: nrts
+    # mode: 0644
+  loop:
+    - { url: "https://github.com/iris-edu/dataselect/archive/v3.22.tar.gz" }
+    - { url: "https://github.com/iris-edu/msi/archive/v3.8.tar.gz" }
+    - { url: "https://github.com/iris-edu/ringserver/archive/v2020.075.tar.gz" }
+    - { url: "https://github.com/iris-edu/slinktool/archive/v4.3.tar.gz" }
+  # become_user: nrts
+  become: yes
+  tags:
+    - miniseed
+
+- name: build dataselect utility
+  make:
+    chdir: "{{ build_root }}/dataselect-3.22/{{ item.subdir }}"
+  loop:
+    - { subdir: libmseed }
+    - { subdir: src }
+  # become_user: nrts
+  become: yes
+  tags:
+    - miniseed
+
+- name: install dataselect
+  shell: |
+    install -o root -g root -m 755 {{ build_root }}/dataselect-3.22/dataselect {{ deploy_root }}
+  become: yes
+
+- name: build msi & ringserver
+  make:
+    chdir: "{{ build_root }}/{{ item.dir }}"
+  loop:
+    - { dir: "msi-3.8" }
+    - { dir: "ringserver-2020.075" }
+  # become_user: nrts
+  become: yes
+  tags:
+    - miniseed
+
+- name: install msi
+  shell: |
+    install -o root -g root -m 755 {{ build_root }}/msi-3.8/msi {{ deploy_root }}
+  become: yes
+
+- name: install ringserver
+  shell: |
+    install -o root -g root -m 755 {{ build_root }}/ringserver-2020.075/ringserver {{ deploy_root }}
+  become: yes
+
+#################################
+# SLINKTOOL special build sequence
+# first build libslink
+- name: special build sequence required for slinktool - LIBSLINK
+  make:
+    chdir: "{{ build_root }}/slinktool-4.3/libslink"
+  # become_user: nrts
+  become: yes
+  tags:
+    - miniseed
+    - slinktool
+
+- name: special build sequence required for slinktool - EZXML
+  make:
+    chdir: "{{ build_root }}/slinktool-4.3/ezxml"
+    params:
+      CFLAGS: -std=c99
+  # become_user: nrts
+  become: yes
+  tags:
+    - miniseed
+    - slinktool
+
+- name: special build sequence required for slinktool - SLINKTOOL
+  make:
+    chdir: "{{ build_root }}/slinktool-4.3/"
+  # become_user: nrts
+  become: yes
+  tags:
+    - miniseed
+    - slinktool
+
+- name: install slinktool
+  shell: |
+    install -o root -g root -m 755 {{ build_root }}/slinktool-4.3/slinktool {{ deploy_root }}
+  become: yes
+
+
+#    - { dir: "slinktool-4.3" }
+
+# - name: build dataselect v3.22
+#   shell: |
+#     cd "{{ build_root }}/build"
+#     rm -rf dataselect-3.22
+#     tar xf dataselect-3.22.tar.gz
+#     cd dataselect-3.22
+#     make
+#   args:
+#     executable: /usr/bin/tcsh
+#   become_user: nrts
+#   become: yes
+#   tags:
+#     - miniseed
+
+# - name: build msi v3.8
+#   shell: |
+#     cd "{{ build_root }}/build"
+#     rm -rf msi-3.8
+#     tar xf msi-3.8.tar.gz
+#     cd msi-3.8
+#     make
+#   args:
+#     executable: /usr/bin/tcsh
+#   become_user: nrts
+#   become: yes
+#   tags:
+#     - miniseed
+
+# - name: build ringserver v2018.078
+#   # when: ringserver_on
+#   shell: |
+#     cd "{{ build_root }}/build"
+#     rm -rf ringserver-2020.075
+#     tar xf ringserver-2020.075.tar.gz
+#     cd ringserver-2020.075
+#     make
+#   args:
+#     executable: /usr/bin/tcsh
+#   become_user: nrts
+#   become: yes
+#   tags:
+#     - miniseed
+
+# - name: build slinktool v4.3 
+#   shell: |
+#     cd "{{ build_root }}/build"
+#     rm -rf slinktool-4.3
+#     tar xf slinktool-4.3.tar.gz
+#     cd slinktool-4.3/libslink
+#     make
+#     cd ../ezxml
+#     setenv CFLAGS -std=c99
+#     make
+#     cd ..
+#     unsetenv CFLAGS
+#     make
+#   args:
+#     executable: /usr/bin/tcsh
+#   become_user: nrts
+#   become: yes
+#   tags:
+#     - miniseed
+

@@ -1,0 +1,29 @@
+# os_family == 'redhat' SYSTEM SPECIFIC
+- name: install system pkgs
+  yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  become: true
+  loop: 
+    - openssh
+    - make
+    - zlib-devel
+    - wget
+    - gcc
+    - ncurses-devel
+    - libxml2-devel
+    - tcsh
+    - vim
+    - ntp
+    - git
+    - lsof
+    - man-pages
+    - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    - iftop
+    - xorriso
+    - tree
+  tags:
+    base
+#    - epel-release
+# xorriso really only for centos 7.7+, but need to get rid of ISOs all together.

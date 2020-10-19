@@ -1,0 +1,106 @@
+- name: make sure build dir exists
+  file:
+    path: "{{ build_root }}/build/nrts"
+    recurse: true
+    state: directory
+    owner: nrts
+    group: nrts
+    mode: 0755
+  become: true
+
+
+- name: clear old src and build artifacts
+  file:
+    path: "{{ build_root }}/build/nrts/{{ item }}"
+    state: absent
+  loop:
+    - bin
+    - lib
+    - src
+  become: yes
+
+- name: get source repositories
+  shell: 
+    chdir: "{{ build_root }}/build/nrts"
+    cmd: |
+      git clone -b {{ git_src_branch }} https://github.com/projectida/src.git src
+      chown -R nrts:nrts {{ build_root }}
+  become: yes
+
+- name: build nrts software
+  become: yes
+  become_user: nrts
+  shell: |
+    cd "{{ build_root }}/build/nrts/src"
+    ./build.csh {{ deploy_root }}
+
+##################################
+- name: create nrts system dirs
+  file:
+    path: "{{ deploy_root }}/{{ item }}"
+    state: directory
+    owner: nrts
+    group: nrts
+    mode: 0775
+  become: true
+  loop:
+    - bin
+    - scripts
+    - log
+    - tmp
+
+- name: touch nrtslog
+  shell:
+    chdir: "{{ deploy_root }}/log"
+    cmd: |
+      touch nrtslog
+      chmod 664 nrtslog
+  become_user: nrts
+  become: yes
+  tags:
+    logger
+
+- name: add root to nrts group (for rsyslog)
+  user:
+    name: root
+    append: yes
+    groups: nrts
+  become: yes
+
+- name: copy user nrts runtime env dotfiles and default ~nrts/etc files
+  copy:
+    src: "{{ build_root }}/build/nrts/src/env-runtime/nrts/{{ item.src }}"
+    dest: "{{ deploy_root }}/{{ item.dest }}"
+    owner: nrts
+    group: nrts
+    mode: preserve
+    remote_src: yes
+  loop:
+    - { src: aliases,   dest: .aliases }
+    - { src: bvirc,     dest: .bvirc }
+    - { src: cshrc,     dest: .cshrc }
+    - { src: envrc,     dest: envrc }
+    - { src: iwvrc,     dest: .iwvrc }
+    - { src: pathrc,    dest: .pathrc }
+    - { src: platform,  dest: .platform }
+  # become_method: su
+  become_user: nrts
+  become: yes
+
+- name: set NRTS_HOME in envrc
+  replace: 
+    path: "{{ deploy_root }}/envrc"
+    regexp: '^\b(setenv +NRTS_HOME)[^\n]*$'
+    replace: '\1 {{ deploy_root }}'
+  become_user: nrts
+  become: yes
+  # vars:
+  #   ansible_become_pass: "{{ nrts_user_auth }}"
+
+- name: rename envrc to .envrc
+  command: mv {{ deploy_root }}/envrc {{ deploy_root }}/.envrc
+  become_user: nrts
+  become: yes
+  # vars:
+  #   ansible_become_pass: "{{ nrts_user_auth }}"
+

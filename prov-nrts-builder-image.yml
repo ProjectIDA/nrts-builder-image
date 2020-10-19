@@ -4,33 +4,47 @@
   # become_method: sudo
   # become_user: root
   hosts: default
+  vars:
+    target_major_version: "{{ ansible_facts['distribution_major_version'] }}"
+    target_family: "{{ ansible_facts['os_family']|lower }}"
+    target: "{{ target_family }}{{ target_major_version }}"
 
   tasks:
+    - import_role:
+      name: hub-base
+    vars:
+      nrts_src_version: ""  # currently unused, but should in future, pull from github "release" version
+      system_hostname: nrtshub
+      home_root: "{{ home_location }}"
+      nrts_home_dir : "{{ home_location }}/nrts"
+      git_src_branch: "{{ git_branch }}"
 
-  - name: install make
-    yum:
-      name: "{{ item }}"
-      state: latest
-      update_cache: yes
-    become: true
-    loop:
-      - openssh
-      - make
-      - zlib-devel
-      - wget
-      - gcc
-      - ncurses-devel
-      - libxml2-devel
-      - tcsh
-      - vim
-      - ntp
-      - git
-      - lsof
-      - man-pages
-      - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-      - iftop
-      - xorriso
-      - tree
+
+
+  # - name: install OS packages
+  #   yum:
+  #     name: "{{ item }}"
+  #     state: latest
+  #     update_cache: yes
+  #   become: true
+  #   loop:
+  #     - openssh
+  #     - make
+  #     - zlib-devel
+  #     - wget
+  #     - gcc
+  #     - ncurses-devel
+  #     - libxml2-devel
+  #     - tcsh
+  #     - vim
+  #     - ntp
+  #     - git
+  #     - lsof
+  #     - man-pages
+  #     - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+  #     - iftop
+  #     - xorriso
+  #     - tree
   
   # - name: install pip 
   #   yum:
