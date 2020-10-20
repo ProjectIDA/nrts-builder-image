@@ -65,7 +65,7 @@
 - name: download miniseed/ringserver utilities from github.com
   get_url:
     url: "{{ item.url }}"
-    dest: "{{ build_root }}/{{ dest }}"
+    dest: "{{ build_root }}/{{ item.dest }}"
     group: nrts
     owner: nrts
     mode: 0644
