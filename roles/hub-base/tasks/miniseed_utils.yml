@@ -64,21 +64,21 @@
 
 - name: download miniseed/ringserver utilities from github.com
   get_url:
-    url: "{{ item }}"
-    dest: "{{ build_root }}/"
+    url: "{{ item.url }}"
+    dest: "{{ build_root }}/{{ dest }}"
     group: nrts
     owner: nrts
     mode: 0644
   loop:
-    - "https://github.com/iris-edu/dataselect/archive/v3.22.tar.gz"
-    - "https://github.com/iris-edu/msi/archive/v3.8.tar.gz"
-    - "https://github.com/iris-edu/ringserver/archive/v2020.075.tar.gz"
-    - "https://github.com/iris-edu/slinktool/archive/v4.3.tar.gz"
+    - {url: "https://github.com/iris-edu/dataselect/archive/v3.22.tar.gz", dest: "v3.22.tar.gz"}
+    - {url: "https://github.com/iris-edu/msi/archive/v3.8.tar.gz", dest: "v3.8.tar.gz"}
+    - {url: "https://github.com/iris-edu/ringserver/archive/v2020.075.tar.gz", dest: "v2020.075.tar.gz"}
+    - {url: "https://github.com/iris-edu/slinktool/archive/v4.3.tar.gz", dest: "v4.3.tar.gz"}
   become: yes
   tags:
     - miniseed
     
-- name: download miniseed/ringserver utilities from github.com
+- name: uncompress miniseed/ringserver source
   unarchive:
     remote_src: yes
     src: "{{ build_root }}/{{ item }}"
@@ -101,7 +101,6 @@
   loop:
     - { subdir: libmseed }
     - { subdir: src }
-  # become_user: nrts
   become: yes
   tags:
     - miniseed
@@ -117,7 +116,6 @@
   loop:
     - { dir: "msi-3.8" }
     - { dir: "ringserver-2020.075" }
-  # become_user: nrts
   become: yes
   tags:
     - miniseed
