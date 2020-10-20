@@ -124,11 +124,15 @@
   shell: |
     install -o root -g root -m 755 {{ build_root }}/msi-3.8/msi {{ deploy_root }}
   become: yes
+  tags:
+    - miniseed
 
 - name: install ringserver
   shell: |
     install -o root -g root -m 755 {{ build_root }}/ringserver-2020.075/ringserver {{ deploy_root }}
   become: yes
+  tags:
+    - miniseed
 
 #################################
 # SLINKTOOL special build sequence
