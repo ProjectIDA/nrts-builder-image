@@ -110,11 +110,20 @@
     install -o root -g root -m 755 {{ build_root }}/dataselect-3.22/dataselect {{ deploy_root }}
   become: yes
 
-- name: build msi & ringserver
+- name: build msi
   make:
     chdir: "{{ build_root }}/{{ item.dir }}"
   loop:
     - { dir: "msi-3.8" }
+  become: yes
+  tags:
+    - miniseed
+
+- name: build ringserver
+  shell:
+    chdir: "{{ build_root }}/{{ item.dir }}"
+    cmd: make
+  loop:
     - { dir: "ringserver-2020.075" }
   become: yes
   tags:
