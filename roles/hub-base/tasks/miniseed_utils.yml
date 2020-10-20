@@ -66,9 +66,9 @@
   get_url:
     url: "{{ item.url }}"
     dest: "{{ build_root }}/{{ item.dest }}"
-    group: nrts
-    owner: nrts
-    mode: 0644
+    # group: nrts
+    # owner: nrts
+    # mode: 0644
   loop:
     - {url: "https://github.com/iris-edu/dataselect/archive/v3.22.tar.gz", dest: "v3.22.tar.gz"}
     - {url: "https://github.com/iris-edu/msi/archive/v3.8.tar.gz", dest: "v3.8.tar.gz"}
@@ -83,9 +83,9 @@
     remote_src: yes
     src: "{{ build_root }}/{{ item }}"
     dest: "{{ build_root }}/"
-    group: nrts
-    owner: nrts
-    mode: 0644
+    # group: nrts
+    # owner: nrts
+    # mode: 0644
   loop:
     - "v3.22.tar.gz"
     - "v3.8.tar.gz"
@@ -115,15 +115,6 @@
     chdir: "{{ build_root }}/{{ item.dir }}"
   loop:
     - { dir: "msi-3.8" }
-  become: yes
-  tags:
-    - miniseed
-
-- name: build ringserver
-  shell:
-    chdir: "{{ build_root }}/{{ item.dir }}"
-    cmd: make
-  loop:
     - { dir: "ringserver-2020.075" }
   become: yes
   tags:
