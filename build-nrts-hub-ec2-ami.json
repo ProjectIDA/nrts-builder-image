@@ -42,7 +42,7 @@
         "extra_arguments": [ "-vv",
             "--extra-vars", 
             "home_location=/home git_branch=master",
-            "--tags [base miniseed]"
+            "--tags base,miniseed"
         ],
         "playbook_file": "./prov-nrts-builder-image.yml"
     }]
