@@ -1,8 +1,6 @@
 ---
-- name: Build Docker image to build IDA NRTS binaries
+- name: Provision AMI image with IDA NRTS
   remote_user: ec2-user
-  # become_method: sudo
-  # become_user: root
   hosts: default
   vars:
     target_major_version: "{{ ansible_facts['distribution_major_version'] }}"
@@ -18,42 +16,3 @@
         home_root: "{{ home_location }}"
         nrts_home_dir : "{{ home_location }}/nrts"
         git_src_branch: "{{ git_branch }}"
-
-
-
-  # - name: install OS packages
-  #   yum:
-  #     name: "{{ item }}"
-  #     state: latest
-  #     update_cache: yes
-  #   become: true
-  #   loop:
-  #     - openssh
-  #     - make
-  #     - zlib-devel
-  #     - wget
-  #     - gcc
-  #     - ncurses-devel
-  #     - libxml2-devel
-  #     - tcsh
-  #     - vim
-  #     - ntp
-  #     - git
-  #     - lsof
-  #     - man-pages
-  #     - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-  #     - iftop
-  #     - xorriso
-  #     - tree
-  
-  # - name: install pip 
-  #   yum:
-  #     name: python-pip
-  #     state: latest
-
-  # - name: install aws cli
-  #   shell: pip install awscli 
-
-  # - name: check aws cli version
-  #   shell: aws --version
-
