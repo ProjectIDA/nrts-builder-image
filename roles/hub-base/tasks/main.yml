@@ -259,7 +259,8 @@
   tags:
     nrtsbuild
   loop:
-
+    - nrts
+    - tunnel
 
 # requires nrts_home_dir 
 - name: install custom NRTS rsyslog conf
