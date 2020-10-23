@@ -248,17 +248,18 @@
     backup: yes
   become: true
 
-# requires nrts_home_dir
 - name: update perms on homedirs
   file:
-    path: "{{ nrts_home_dir }}"
+    path: "{{ home_root }}/{{ item }}"
     state: directory
-    owner: nrts
-    group: nrts
-    mode: "g+rwx"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: "g+rx"
   become: true
   tags:
     nrtsbuild
+  loop:
+
 
 # requires nrts_home_dir 
 - name: install custom NRTS rsyslog conf
