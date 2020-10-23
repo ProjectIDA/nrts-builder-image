@@ -94,6 +94,16 @@
   tags:
     base
 
+- name: Set PasswordAuthentication to 'yes' (the default)
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: '^ *PasswordAuthentication +no'
+    replace: '###ALLOW NRTS TUNNEL CONNECTION PasswordAuthentication no'
+    backup: yes
+  become: true
+  tags:
+    base
+
 - name: clea out users to start from scratch
   user:
     name: "{{ item }}"
