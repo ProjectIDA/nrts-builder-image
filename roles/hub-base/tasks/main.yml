@@ -104,15 +104,15 @@
   tags:
     base
 
-- name: Set ssh_pwauth to 'true' for cloud_init cfg
-  replace:
-    path: /etc/cloud/cloud.cfg
-    regexp: '^ *ssh_pwauth: * false'
-    replace: 'ssh_pwauth: true'
-    backup: yes
-  become: true
-  tags:
-    base
+# - name: Set ssh_pwauth to 'true' for cloud_init cfg
+#   replace:
+#     path: /etc/cloud/cloud.cfg
+#     regexp: '^ *ssh_pwauth: * false'
+#     replace: 'ssh_pwauth: true'
+#     backup: yes
+#   become: true
+#   tags:
+#     base
 
 - name: Get stats of a /etc/cloud/cloud.cfg.d dir to test for ec2 cloud env
   stat:
