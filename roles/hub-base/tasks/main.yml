@@ -104,7 +104,20 @@
   tags:
     base
 
-- name: clea out users to start from scratch
+- name: Get stats of a /etc/cloud.cfg.d dir to test for ec2 cloud env
+  stat:
+    path: /etc/cloud.cfg.d
+  register: cloudstat
+
+- name: Set pw auth to true in EC2 cloud.init environment
+  shell: |
+    echo "ssh_pwauth: true" > /etc/cloud.cfg.d/90_nrts
+  become: true
+  when: cloudstat.stat.isdir is defined and cloudstat.stat.isdir
+  tags:
+    base
+
+- name: clear out users to start from scratch
   user:
     name: "{{ item }}"
     local: yes
