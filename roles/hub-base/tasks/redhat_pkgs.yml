@@ -2,7 +2,7 @@
 - name: install system pkgs
   yum:
     name: "{{ item }}"
-    state: present
+    state: latest
     update_cache: yes
   become: true
   loop: 

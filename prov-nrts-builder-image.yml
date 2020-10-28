@@ -22,3 +22,4 @@
         home_root: "{{ home_location }}"
         nrts_home_dir : "{{ home_location }}/nrts"
         git_src_branch: "{{ git_branch }}"
+
