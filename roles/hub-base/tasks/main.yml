@@ -121,7 +121,7 @@
 
 - name: Set pw auth to true in EC2 cloud.init environment
   shell: |
-    echo "ssh_pwauth: true" > /etc/cloud/cloud.cfg.d/90_nrts
+    echo "ssh_pwauth: true" > /etc/cloud/cloud.cfg.d/90_nrts.cfg
   become: true
   when: cloudstat.stat.isdir is defined and cloudstat.stat.isdir
   tags:
