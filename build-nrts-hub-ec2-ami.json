@@ -4,7 +4,6 @@
         "aws_secret_key": "{{user `AWSSECRET`}}",
         "ami_name": "ida-nrts-hub",
         "aws_region": "us-west-2",
-        "aws_ami_regions": ["us-west-2", "us-east-2"],
         "ssh_username": "ec2-user",
         "vpc_id": "vpc-7be41303",
         "subnet_id": "subnet-0a9e19fa2b53685f0"
@@ -21,7 +20,7 @@
         "associate_public_ip_address": true,
         "subnet_id": "{{user `subnet_id`}}",
         "ami_name": "{{user `ami_name`}}",
-        "ami_regions": "{{user `aws_ami_regions`}}",
+        "ami_regions": ["us-west-2", "us-east-2"],
         "source_ami_filter": {
             "filters": {
                 "virtualization-type": "hvm",
