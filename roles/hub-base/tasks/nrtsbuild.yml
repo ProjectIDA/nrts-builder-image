@@ -19,13 +19,19 @@
     - src
   become: yes
 
-- name: get source repositories
-  shell: 
-    chdir: "{{ build_root }}/build/nrts"
-    cmd: |
-      ls -l ~/.ssh
-      git clone -b {{ git_src_branch }} git@github.com:projectida/nrts-src.git nrts-src
-      chown -R nrts:nrts {{ build_root }}
+# - name: get source repositories
+#   shell: 
+#     chdir: "{{ build_root }}/build/nrts"
+#     cmd: |
+#       ls -l ~/.ssh
+#       git clone -b {{ git_src_branch }} git@github.com:projectida/nrts-src.git nrts-src
+#       chown -R nrts:nrts {{ build_root }}
+#   become: yes
+
+- name: Example clone of a single branch
+  ansible.builtin.git:
+    repo: git@github.com:projectida/nrts-src.git
+    dest: "{{ build_root }}/build/nrts"
   become: yes
 
 - name: build nrts software
