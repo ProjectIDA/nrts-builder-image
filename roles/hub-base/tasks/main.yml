@@ -141,15 +141,16 @@
     - usermods
   ignore_errors: True
 
-- name: clean out dangling home dirs
-  file:
-    path: "{{ home_root}}/{{ item }}"
-    state: absent
-  become: yes
-  loop:
-    - nrts 
-    - tunnel
-  ignore_errors: True
+# not needed with "remove: yes" above
+# - name: clean out dangling home dirs
+#   file:
+#     path: "{{ home_root}}/{{ item }}"
+#     state: absent
+#   become: yes
+#   loop:
+#     - nrts 
+#     - tunnel
+#   ignore_errors: True
 
 - name: clean out groups to strart from scratch
   group:
@@ -202,21 +203,21 @@
 ####################################################################
 
 - name: Create LOCAL user NRTS
-  shell: |
-    luseradd -u 4000 -d {{ nrts_home_dir }} -s /bin/tcsh -p '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00' nrts
-    mkdir {{ nrts_home_dir }}/.ssh
-    ssh-keygen -t rsa -b 2048 -N '' -f {{ nrts_home_dir}}/.ssh/id_rsa
-    chown -R nrts:nrts {{ nrts_home_dir}}/.ssh
-    chmod 700 {{ nrts_home_dir }}/.ssh
+  # shell: |
+  #   luseradd -u 4000 -d {{ nrts_home_dir }} -s /bin/tcsh -p '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00' nrts
+  #   mkdir {{ nrts_home_dir }}/.ssh
+  #   ssh-keygen -t rsa -b 2048 -N '' -f {{ nrts_home_dir}}/.ssh/id_rsa
+  #   chown -R nrts:nrts {{ nrts_home_dir}}/.ssh
+  #   chmod 700 {{ nrts_home_dir }}/.ssh
   # ansible bug in user module that inserts 'useradd' options that are unsupported by 'luseradd'
-  # user:
-  #   name: nrts
-  #   local: yes
-  #   password: '$6$2HD/LDqZQW8pofXt$Frj9Fos6VJBT12e/NTeyd3kQdEGH4drWDSBETxx2OifFk215rBr9Ta0xdHcER.O.u/aQ3xI.OXaDZbBkxpeIy0'
-  #   state: present
-  #   home: "{{ nrts_home_dir }}"
-  #   shell: /bin/tcsh
-  #   generate_ssh_key: yes
+  user:
+    name: nrts
+    local: yes
+    password: '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00'
+    state: present
+    home: "{{ nrts_home_dir }}"
+    shell: /bin/tcsh
+    generate_ssh_key: yes
   become: yes
   tags:
     - usermods
@@ -249,6 +250,7 @@
     - usermods
 ####################################################################
 
+# requires nrts_home_dir
 - name: Set mode on NRTS home dir
   file:
     name: "{{ nrts_home_dir }}"
