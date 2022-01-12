@@ -203,21 +203,21 @@
 ####################################################################
 
 - name: Create LOCAL user NRTS
-  # shell: |
-  #   luseradd -u 4000 -d {{ nrts_home_dir }} -s /bin/tcsh -p '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00' nrts
-  #   mkdir {{ nrts_home_dir }}/.ssh
-  #   ssh-keygen -t rsa -b 2048 -N '' -f {{ nrts_home_dir}}/.ssh/id_rsa
-  #   chown -R nrts:nrts {{ nrts_home_dir}}/.ssh
-  #   chmod 700 {{ nrts_home_dir }}/.ssh
+  shell: |
+    luseradd -u 4000 -d {{ nrts_home_dir }} -s /bin/tcsh -p '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00' nrts
+    mkdir {{ nrts_home_dir }}/.ssh
+    ssh-keygen -t rsa -b 2048 -N '' -f {{ nrts_home_dir}}/.ssh/id_rsa
+    chown -R nrts:nrts {{ nrts_home_dir}}/.ssh
+    chmod 700 {{ nrts_home_dir }}/.ssh
   # ansible bug in user module that inserts 'useradd' options that are unsupported by 'luseradd'
-  user:
-    name: nrts
-    local: yes
-    password: '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00'
-    state: present
-    home: "{{ nrts_home_dir }}"
-    shell: /bin/tcsh
-    generate_ssh_key: yes
+  # user:
+  #   name: nrts
+  #   local: yes
+  #   password: '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00'
+  #   state: present
+  #   home: "{{ nrts_home_dir }}"
+  #   shell: /bin/tcsh
+  #   generate_ssh_key: yes
   become: yes
   tags:
     - usermods
