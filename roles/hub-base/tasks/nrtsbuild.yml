@@ -30,9 +30,9 @@
 - name: build nrts software
   become: yes
   become_user: nrts
-  shell: |
-    cd "{{ build_root }}/build/nrts/src"
-    ./build.csh {{ deploy_root }}
+  shell:
+    chdir:  "{{ build_root }}/build/nrts/nrts-src"
+    cmd: ./build.csh {{ deploy_root }}
 
 ##################################
 - name: create nrts system dirs
