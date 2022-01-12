@@ -4,7 +4,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/python:3.7.9
+      - image: cimg/python:3.7.9
         environment:
           PACKER_VER: 1.6.4
     steps:
