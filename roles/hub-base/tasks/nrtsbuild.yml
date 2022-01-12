@@ -28,11 +28,11 @@
 #       chown -R nrts:nrts {{ build_root }}
 #   become: yes
 
-- name: Example clone of a single branch
+- name: get NRTS source repository
   ansible.builtin.git:
     repo: git@github.com:projectida/nrts-src.git
     dest: "{{ build_root }}/build/nrts"
-  become: yes
+  # become: yes
 
 - name: build nrts software
   become: yes
