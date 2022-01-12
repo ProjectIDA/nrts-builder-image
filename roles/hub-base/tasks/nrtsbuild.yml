@@ -23,7 +23,7 @@
   shell: 
     chdir: "{{ build_root }}/build/nrts"
     cmd: |
-      git clone -b {{ git_src_branch }} https://github.com/projectida/src.git src
+      git clone -b {{ git_src_branch }} https://github.com/projectida/nrts-src.git nrts-src
       chown -R nrts:nrts {{ build_root }}
   become: yes
 
