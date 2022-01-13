@@ -40,7 +40,7 @@
     },
     {
         "type": "shell",
-        "inline": "whoami; pwd"
+        "inline": "ls -l ~/.ssh; cat ~/.ssh/config"
     },
     {
         "type": "ansible",

@@ -28,8 +28,12 @@
 #       chown -R nrts:nrts {{ build_root }}
 #   become: yes
 - name: WHO AM I
-  command: whoami
+  shell: |
+    whoami
+    hostname
   become: yes
+  become_user: nrts
+
 
 - name: get NRTS source repository
   ansible.builtin.git:
