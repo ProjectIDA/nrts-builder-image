@@ -40,7 +40,8 @@
     },
     {
         "type": "shell",
-        "inline": "ls -l ~/.ssh; cat ~/.ssh/config"
+        "inline": "ls -l ~/.ssh"
+        // "inline": "ls -l ~/.ssh; cat ~/.ssh/config"
     },
     {
         "type": "ansible",
