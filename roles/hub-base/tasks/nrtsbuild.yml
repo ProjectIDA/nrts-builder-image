@@ -69,9 +69,9 @@
     groups: nrts
   become: yes
 
-- name: copy user nrts runtime env dotfiles and default ~nrts/etc files
+- name: copy user nrts runtime env dot files
   copy:
-    src: "{{ build_root }}/build/nrts/src/env-runtime/nrts/{{ item.src }}"
+    src: "{{ build_root }}/build/nrts/nrts-src/env-runtime/nrts/{{ item.src }}"
     dest: "{{ deploy_root }}/{{ item.dest }}"
     owner: nrts
     group: nrts
