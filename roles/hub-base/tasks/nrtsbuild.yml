@@ -1,6 +1,16 @@
+- name: clear old src and build artifacts
+  file:
+    path: "{{ build_root }}/build/nrts/*"
+    state: absent
+  # loop:
+  #   - bin
+  #   - lib
+  #   - src
+  become: yes
+
 - name: make sure build dir exists
   file:
-    path: "{{ build_root }}/build/nrts"
+    path: "{{ build_root }}/build/nrts/nrts-src"
     recurse: true
     state: directory
     owner: nrts
@@ -9,35 +19,12 @@
   become: true
 
 
-- name: clear old src and build artifacts
-  file:
-    path: "{{ build_root }}/build/nrts/{{ item }}"
-    state: absent
-  loop:
-    - bin
-    - lib
-    - src
-  become: yes
-
-# - name: get source repositories
-#   shell: 
-#     chdir: "{{ build_root }}/build/nrts"
-#     cmd: |
-#       ls -l ~/.ssh
-#       git clone -b {{ git_src_branch }} git@github.com:projectida/nrts-src.git nrts-src
-#       chown -R nrts:nrts {{ build_root }}
-#   become: yes
-- name: WHO AM I
-  shell: 
-    cmd: whoami & hostname
-  become: yes
-  become_user: nrts
-
-
+# NOTE: ansibe does not add another directory level using the repo name, 
+#       it just puts repo contaents in dir specified
 - name: get NRTS source repository
   ansible.builtin.git:
     repo: https://github.com/projectida/nrts-src.git
-    dest: "{{ build_root }}/build/nrts/"
+    dest: "{{ build_root }}/build/nrts/nrts-src"
     accept_hostkey: yes
   become: yes
   become_user: nrts
