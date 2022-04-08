@@ -38,7 +38,7 @@
 - name: get NRTS source repository
   ansible.builtin.git:
     repo: https://github.com/projectida/nrts-src.git
-    dest: "{{ build_root }}/build/"
+    dest: "{{ build_root }}/build/nrts/"
     accept_hostkey: yes
   become: yes
   become_user: nrts
