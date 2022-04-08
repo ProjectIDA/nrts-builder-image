@@ -28,9 +28,8 @@
 #       chown -R nrts:nrts {{ build_root }}
 #   become: yes
 - name: WHO AM I
-  shell: |
-    whoami
-    hostname
+  shell: 
+    cmd: whoami & hostname
   become: yes
   become_user: nrts
 
