@@ -41,6 +41,7 @@
     dest: "{{ build_root }}/build/nrts"
     accept_hostkey: yes
   become: yes
+  become_user: nrts
 
 - name: build nrts software
   become: yes
