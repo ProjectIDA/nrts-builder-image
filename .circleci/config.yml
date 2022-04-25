@@ -3,10 +3,10 @@ orbs:
   slack: circleci/slack@4.0.0
 jobs:
   build:
-    docker:
+    docker:    
       - image: cimg/python:3.8
         environment:
-          PACKER_VER: 1.6.4
+          PACKER_VER: 1.8.0
     steps:
       - run:
           name: Install unzip
