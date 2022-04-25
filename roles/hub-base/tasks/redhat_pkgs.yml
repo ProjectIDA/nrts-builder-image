@@ -1,4 +1,10 @@
 # os_family == 'redhat' SYSTEM SPECIFIC
+- name: Add repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+
 - name: install system pkgs
   yum:
     name: "{{ pkgs }}"
@@ -21,7 +27,7 @@
       - git
       - lsof
       - man-pages
-      - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      # - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
       - iftop
       - xorriso
       - tree
