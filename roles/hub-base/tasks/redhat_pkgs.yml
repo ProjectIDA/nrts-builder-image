@@ -2,7 +2,7 @@
 - name: Enable EPEL repo on AWS EC2 Amazon Linux 2 Instances
   shell: |
     amazon-linux-extras install epel -y
-  when: cloudstat.stat.isdir is defined and cloudstat.stat.isdir
+  when: is_ec2
   become: true
 
 - name: Enable EPEL repo on Centos 7 OSes
