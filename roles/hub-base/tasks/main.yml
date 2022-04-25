@@ -105,15 +105,15 @@
   tags:
     base
 
-- name: stop and disable ntp service
-  systemd:
-    name: ntp.service
-    state: stopped
-    enabled: no
-  become: true
-  when: ansible_facts['os_family'] == "Debian"
-  tags:
-    base
+# - name: stop and disable ntp service
+#   systemd:
+#     name: ntp.service
+#     state: stopped
+#     enabled: no
+#   become: true
+#   when: ansible_facts['os_family'] == "Debian"
+#   tags:
+#     base
 
 - name: Set PermitRootLogin to 'no'
   replace:

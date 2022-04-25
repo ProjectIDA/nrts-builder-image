@@ -46,3 +46,12 @@
     base
 #    - epel-release
 # xorriso really only for centos 7.7+, but need to get rid of ISOs all together.
+
+- name: remove system pkgs
+  yum:
+    name: "{{ pkgs }}"
+    state: absent
+  become: true
+  vars:
+    pkgs: 
+      - ntpd
