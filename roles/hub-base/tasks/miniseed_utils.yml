@@ -7,33 +7,52 @@
     - miniseed
 
 - name: download miniseed/ringserver utilities from github.com
-  get_url:
-    url: "{{ item.url }}"
-    dest: "{{ build_root }}/{{ item.dest }}"
-  loop:
-    - {url: "https://github.com/iris-edu/dataselect/archive/v3.22.tar.gz", dest: "v3.22.tar.gz"}
-    - {url: "https://github.com/iris-edu/msi/archive/v3.8.tar.gz", dest: "v3.8.tar.gz"}
-    - {url: "https://github.com/iris-edu/ringserver/archive/v2020.075.tar.gz", dest: "v2020.075.tar.gz"}
-    - {url: "https://github.com/iris-edu/slinktool/archive/v4.3.tar.gz", dest: "v4.3.tar.gz"}
-  become: yes
-  tags:
-    - miniseed
-    
-- name: uncompress miniseed/ringserver source
   unarchive:
     remote_src: yes
-    src: "{{ build_root }}/{{ item }}"
+    src: "{{ item.url }}"
     dest: "{{ build_root }}/"
+    # group: nrts
+    # owner: nrts
+    # mode: 0644
   loop:
-    - "v3.22.tar.gz"
-    - "v3.8.tar.gz"
-    - "v2020.075.tar.gz"
-    - "v4.3.tar.gz"
-  become: yes
+    - { url: "https://github.com/iris-edu/dataselect/archive/v3.22.tar.gz" }
+    - { url: "https://github.com/iris-edu/msi/archive/v3.8.tar.gz" }
+    - { url: "https://github.com/iris-edu/ringserver/archive/v2020.075.tar.gz" }
+    - { url: "https://github.com/iris-edu/slinktool/archive/v4.3.tar.gz" }
+  # become_user: nrts
+  become: true
   tags:
     - miniseed
+
+
+# - name: download miniseed/ringserver utilities from github.com
+#   get_url:
+#     url: "{{ item.url }}"
+#     dest: "{{ build_root }}/{{ item.dest }}"
+#   loop:
+#     - {url: "https://github.com/iris-edu/dataselect/archive/v3.22.tar.gz", dest: "v3.22.tar.gz"}
+#     - {url: "https://github.com/iris-edu/msi/archive/v3.8.tar.gz", dest: "v3.8.tar.gz"}
+#     - {url: "https://github.com/iris-edu/ringserver/archive/v2020.075.tar.gz", dest: "v2020.075.tar.gz"}
+#     - {url: "https://github.com/iris-edu/slinktool/archive/v4.3.tar.gz", dest: "v4.3.tar.gz"}
+#   become: true
+#   tags:
+#     - miniseed
     
-- name: build msi
+# - name: uncompress miniseed/ringserver source
+#   unarchive:
+#     remote_src: yes
+#     src: "{{ build_root }}/{{ item }}"
+#     dest: "{{ build_root }}/"
+#   loop:
+#     - "v3.22.tar.gz"
+#     - "v3.8.tar.gz"
+#     - "v2020.075.tar.gz"
+#     - "v4.3.tar.gz"
+#   become: true
+#   tags:
+#     - miniseed
+    
+- name: build miniseed/ringserver utils
   make:
     chdir: "{{ build_root }}/{{ item.dir }}"
   loop:
@@ -41,52 +60,55 @@
     - { dir: dataselect-3.22/src }
     - { dir: msi-3.8 }
     - { dir: ringserver-2020.075 }
-
-  become: yes
+    - { dir: slinktool-4.3/libslink }
+    - { dir: slinktool-4.3/ezxml }
+    - { dir: slinktool-4.3 }
+  become: true
   tags:
     - miniseed
 
-- name: install dataselect
+- name: install miniseed/ringserver utils
   shell: |
     install -o root -g root -m 755 {{ build_root }}/dataselect-3.22/dataselect {{ deploy_root }}
-  become: yes
+  become: true
   loop:
     - "{{ build_root }}/dataselect-3.22/dataselect"
     - "{{ build_root }}/msi-3.8/msi"
     - "{{ build_root }}/ringserver-2020.075/ringserver"
+    - "{{ build_root }}/slinktool-4.3/slinktool"
   tags:
     - miniseed
 
 #################################
 # SLINKTOOL special build sequence
 # first build libslink
-- name: special build sequence required for slinktool - LIBSLINK
-  make:
-    chdir: "{{ build_root }}/slinktool-4.3/libslink"
-  become: yes
-  tags:
-    - miniseed
-    - slinktool
+# - name: special build sequence required for slinktool - LIBSLINK
+#   make:
+#     chdir: "{{ build_root }}/slinktool-4.3/libslink"
+#   become: true
+#   tags:
+#     - miniseed
+#     - slinktool
 
-- name: special build sequence required for slinktool - EZXML
-  make:
-    chdir: "{{ build_root }}/slinktool-4.3/ezxml"
-    params:
-      CFLAGS: -std=c99
-  become: yes
-  tags:
-    - miniseed
-    - slinktool
+# - name: special build sequence required for slinktool - EZXML
+#   make:
+#     chdir: "{{ build_root }}/slinktool-4.3/ezxml"
+#     params:
+#       CFLAGS: -std=c99
+#   become: true
+#   tags:
+#     - miniseed
+#     - slinktool
 
-- name: special build sequence required for slinktool - SLINKTOOL
-  make:
-    chdir: "{{ build_root }}/slinktool-4.3/"
-  become: yes
-  tags:
-    - miniseed
-    - slinktool
+# - name: special build sequence required for slinktool - SLINKTOOL
+#   make:
+#     chdir: "{{ build_root }}/slinktool-4.3/"
+#   become: true
+#   tags:
+#     - miniseed
+#     - slinktool
 
-- name: install slinktool
-  shell: |
-    install -o root -g root -m 755 {{ build_root }}/slinktool-4.3/slinktool {{ deploy_root }}
-  become: yes
+# - name: install slinktool
+#   shell: |
+#     install -o root -g root -m 755 {{ build_root }}/slinktool-4.3/slinktool {{ deploy_root }}
+#   become: true

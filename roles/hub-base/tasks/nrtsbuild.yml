@@ -1,15 +1,11 @@
 - name: clear old src and build artifacts
-  file:
+  ansible.builtin.file:
     path: "{{ build_root }}/build/nrts/*"
     state: absent
-  # loop:
-  #   - bin
-  #   - lib
-  #   - src
   become: yes
 
 - name: make sure build dir exists
-  file:
+  ansible.builtin.file:
     path: "{{ build_root }}/build/nrts/nrts-src"
     recurse: true
     state: directory
@@ -38,7 +34,7 @@
 
 ##################################
 - name: create nrts system dirs
-  file:
+  ansible.builtin.file:
     path: "{{ deploy_root }}/{{ item }}"
     state: directory
     owner: nrts
@@ -46,8 +42,8 @@
     mode: 0775
   become: true
   loop:
-    - bin
-    - scripts
+    # - bin
+    # - scripts
     - log
     - tmp
 
@@ -63,7 +59,7 @@
     logger
 
 - name: add root to nrts group (for rsyslog)
-  user:
+  ansible.builtin.user:
     name: root
     append: yes
     groups: nrts

@@ -40,45 +40,60 @@
   tags:
     base
   
-- name: stop and disable chrony (going to use ntp)
+- name: chrony - redhat (not going to use ntpd)
   # ignore errors in case chrony not installed
   service:
     name: chronyd.service
-    state: stopped
-    enabled: no
+    state: started
+    enabled: yes
   become: true
+  when: ansible_facts['os_family'] == "RedHat"
   ignore_errors: True
   tags:
     base
 
 
+- name: chrony - debian (not going to use ntpd)
+  # ignore errors in case chrony not installed
+  service:
+    name: chrony.service
+    state: started
+    enabled: yes
+  become: true
+  when: ansible_facts['os_family'] == "Debian"
+  ignore_errors: True
+  tags:
+    base
+
 - name: make sure local subnets can query ntp deamon
   lineinfile:
-    path: /etc/ntp.conf
-    regexp: "^ *restrict *127.0.0.1"
-    insertafter: "^ *restrict"
-    line: 'restrict 127.0.0.1'
+    path: /etc/chrony.conf
+    regexp: "^ *allow *127.0.0.1"
+    insertafter: "^ *allow"
+    line: 'allow 127.0.0.1'
     state: present
     backup: yes
   become: true
   tags:
     base
 
-- name: set ntp service to running and enabled
+# Additional CHRONY.CONF customizations will happen in configure step
+
+- name: stop and disable ntpd service
   systemd:
     name: ntpd.service
-    state: started
-    enabled: yes
+    state: stopped
+    enabled: no
   become: true
   when: ansible_facts['os_family'] == "RedHat"
   tags:
     base
 
-- name: set ntp service to running and enabled
+- name: stop and disable ntp service
   systemd:
     name: ntp.service
-    state: started
-    enabled: yes
+    state: stopped
+    enabled: no
   become: true
   when: ansible_facts['os_family'] == "Debian"
   tags:
@@ -114,6 +129,7 @@
 #   tags:
 #     base
 
+# allow password auth on AWS EC2 instances
 - name: Get stats of a /etc/cloud/cloud.cfg.d dir to test for ec2 cloud env
   stat:
     path: /etc/cloud/cloud.cfg.d
@@ -127,43 +143,32 @@
   tags:
     base
 
-- name: clear out users to start from scratch
-  user:
-    name: "{{ item }}"
-    local: yes
-    state: absent
-    remove: yes
-  become: yes
-  loop:
-    - nrts
-    - tunnel
-  tags:
-    - usermods
-  ignore_errors: True
+# - name: clear out users to start from scratch
+#   user:
+#     name: "{{ item }}"
+#     local: yes
+#     state: absent
+#     remove: yes
+#   become: yes
+#   loop:
+#     - nrts
+#     - tunnel
+#   tags:
+#     - usermods
+#   ignore_errors: True
 
-# not needed with "remove: yes" above
-# - name: clean out dangling home dirs
-#   file:
-#     path: "{{ home_root}}/{{ item }}"
+# - name: clean out groups to start from scratch
+#   group:
+#     name: "{{ item }}"
+#     local: yes
 #     state: absent
 #   become: yes
 #   loop:
-#     - nrts 
+#     - nrts
 #     - tunnel
+#   tags:
+#     - usermods
 #   ignore_errors: True
-
-- name: clean out groups to strart from scratch
-  group:
-    name: "{{ item }}"
-    local: yes
-    state: absent
-  become: yes
-  loop:
-    - nrts
-    - tunnel
-  tags:
-    - usermods
-  ignore_errors: True
 
 # - name: clean out home dirs
 #   file:
@@ -194,41 +199,71 @@
 # need to do some shenanigans manually due to OD users and groups
 # group 4000 tied to IGPP OG ssh group 'nrts' for ssh access to host
 # NEED TO RIP THIS OUTTA HERE and make this independent of IGPP/OD
-- name: Create LOCAL nrts group (guid=4000)
-  shell:
-    lgroupadd -g 4000 nrts
-  become: yes
-  tags:
-    - usermods
+# - name: Create LOCAL nrts group (guid=4000)
+#   shell:
+#     lgroupadd -g 4000 nrts
+#   become: yes
+#   tags:
+#     - usermods
 ####################################################################
-
-- name: Create LOCAL user NRTS
-  shell: |
-    luseradd -u 4000 -d {{ nrts_home_dir }} -s /bin/tcsh -p '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00' nrts
-    mkdir {{ nrts_home_dir }}/.ssh
-    ssh-keygen -t rsa -b 2048 -N '' -f {{ nrts_home_dir}}/.ssh/id_rsa
-    chown -R nrts:nrts {{ nrts_home_dir}}/.ssh
-    chmod 700 {{ nrts_home_dir }}/.ssh
-  # ansible bug in user module that inserts 'useradd' options that are unsupported by 'luseradd'
-  # user:
-  #   name: nrts
-  #   local: yes
-  #   password: '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00'
-  #   state: present
-  #   home: "{{ nrts_home_dir }}"
-  #   shell: /bin/tcsh
-  #   generate_ssh_key: yes
+- name: Create LOCAL NRTS Group with (guid=4000)
+  ansible.builtin.group:
+    name: nrts
+    state: present
+    gid: 4000
+    local: yes
   become: yes
   tags:
     - usermods
+
+####################################
+# Generate password with python:
+#   python3 -c "from passlib.hash import sha512_crypt; import getpass; print(sha512_crypt.using(rounds=5000).hash(getpass.getpass()))"
+####################################################################
+- name: Create LOCAL user NRTS
+  ansible.builtin.user:
+    name: nrts
+    local: yes
+    uid: 4000
+    group: nrts
+    home: "{{ nrts_home_dir }}"
+    shell: /usr/bin/tcsh
+    password: '$6$UgRIhsY2OYhpNOeb$n72SxgU43Y34pKR8faAEYkYvP196DXYuK6FJbjGR5xd8mn.QCPQmun8DK2vQQrf7t9T7rjwXdC4.w2oSUgi2K0'
+    generate_ssh_key: yes
+    state: present
+  become: yes
+  tags:
+    - usermods
+
+
+# - name: Create LOCAL user NRTS
+#   shell: |
+#     luseradd -u 4000 -d {{ nrts_home_dir }} -s /bin/tcsh -p '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00' nrts
+#     mkdir {{ nrts_home_dir }}/.ssh
+#     ssh-keygen -t rsa -b 2048 -N '' -f {{ nrts_home_dir}}/.ssh/id_rsa
+#     chown -R nrts:nrts {{ nrts_home_dir}}/.ssh
+#     chmod 700 {{ nrts_home_dir }}/.ssh
+#   # ansible bug in user module that inserts 'useradd' options that are unsupported by 'luseradd'
+#   # user:
+#   #   name: nrts
+#   #   local: yes
+#   #   password: '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00'
+#   #   state: present
+#   #   home: "{{ nrts_home_dir }}"
+#   #   shell: /bin/tcsh
+#   #   generate_ssh_key: yes
+#   become: yes
+#   tags:
+#     - usermods
 
 - name: Create LOCAL user TUNNEL
-  user:
+  ansible.builtin.user:
     name: tunnel
     local: yes
     password: '$6$2HD/LDqZQW8pofXt$Frj9Fos6VJBT12e/NTeyd3kQdEGH4drWDSBETxx2OifFk215rBr9Ta0xdHcER.O.u/aQ3xI.OXaDZbBkxpeIy0'
     state: present
     home: "{{ home_root }}/tunnel"
+    groups: nrts
     shell: /sbin/nologin
     generate_ssh_key: yes
   become: yes
@@ -240,14 +275,14 @@
 # need to do some shenanigans manually due to OD users and groups
 # group 4000 tied to IGPP OG ssh group 'nrts' for ssh access to host
 # NEED TO RIP THIS OUTTA HERE and make this independent of IGPP/OD
-- name: Assign users NRTS and TUNNEL to group NRTS (guid = 4000)
-  shell: lusermod -g 4000 {{ item }}
-  become: yes
-  loop:
-    - nrts
-    - tunnel
-  tags:
-    - usermods
+# - name: Assign users NRTS and TUNNEL to group NRTS (guid = 4000)
+#   shell: lusermod -g 4000 {{ item }}
+#   become: yes
+#   loop:
+#     - nrts
+#     - tunnel
+#   tags:
+#     - usermods
 ####################################################################
 
 # requires nrts_home_dir
@@ -255,7 +290,7 @@
   file:
     name: "{{ nrts_home_dir }}"
     state: directory
-    mode: 02755
+    mode: 02775
     owner: nrts
     group: nrts
   become: yes
@@ -288,9 +323,10 @@
     - tunnel
 
 # requires nrts_home_dir 
+# MAY NEED TO CUSTOMIZE FOR DEBIAN
 - name: install custom NRTS rsyslog conf
   template:
-    src: nrts-rsyslog.redhat.j2
+    src: nrts-rsyslog.j2
     dest: /etc/rsyslog.d/nrts.conf
     owner: root
     group: root
@@ -298,6 +334,7 @@
     backup: yes
   become: true
 
+# MAY NEED TO CUSTOMIZE FOR DEBIAN
 - name: make sure rsyslogd running and enabled with nrts custom conf
   systemd:
     name: rsyslog
@@ -310,7 +347,7 @@
   vars:
     build_root: "{{ nrts_home_dir }}"
     deploy_root: "{{ nrts_home_dir }}"
-  become: yes
+  become: true
   tags:
     nrtsbuild
 
@@ -319,5 +356,18 @@
   vars:
     build_root: "/usr/local/src"
     deploy_root: "/usr/local/bin"
+    ringserver_location: "{{ nrts_home_dir }}"
   tags:
     - miniseed
+
+# requires nrts_home_dir 
+- name: set NRTS_HOME in systemd nrts.service file and install
+  template:
+    src: nrts.service_template.j2
+    dest: /etc/systemd/system/nrts.service
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  become: true
+

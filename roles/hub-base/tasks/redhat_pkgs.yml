@@ -1,28 +1,34 @@
 # os_family == 'redhat' SYSTEM SPECIFIC
 - name: install system pkgs
   yum:
-    name: "{{ item }}"
+    name: "{{ pkgs }}"
     state: latest
     update_cache: yes
   become: true
-  loop: 
-    - openssh
-    - make
-    - zlib-devel
-    - wget
-    - gcc
-    - ncurses-devel
-    - libxml2-devel
-    - tcsh
-    - vim
-    - ntp
-    - git
-    - lsof
-    - man-pages
-    - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-    - iftop
-    - xorriso
-    - tree
+  vars:
+    pkgs: 
+      - openssh
+      - make
+      - zlib-devel
+      - wget
+      - gcc
+      - ncurses-devel
+      - libxml2-devel
+      - tcsh
+      - vim
+  #    - ntp
+      - chrony
+      - git
+      - lsof
+      - man-pages
+      - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      - iftop
+      - xorriso
+      - tree
+      - golang
+      - net-snmp
+      - unzip
+      - jq
   tags:
     base
 #    - epel-release
