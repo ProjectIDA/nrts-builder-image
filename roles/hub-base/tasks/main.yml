@@ -95,15 +95,15 @@
 
 # Additional CHRONY.CONF customizations will happen in configure step
 
-- name: stop and disable ntpd service
-  systemd:
-    name: ntpd.service
-    state: stopped
-    enabled: no
-  become: true
-  when: ansible_facts['os_family'] == "RedHat"
-  tags:
-    base
+# - name: stop and disable ntpd service
+#   systemd:
+#     name: ntpd.service
+#     state: stopped
+#     enabled: no
+#   become: true
+#   when: ansible_facts['os_family'] == "RedHat"
+#   tags:
+#     base
 
 # - name: stop and disable ntp service
 #   systemd:
