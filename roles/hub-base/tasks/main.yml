@@ -230,7 +230,7 @@
     group: nrts
     home: "{{ nrts_home_dir }}"
     shell: /usr/bin/tcsh
-    password: '$6$UgRIhsY2OYhpNOeb$n72SxgU43Y34pKR8faAEYkYvP196DXYuK6FJbjGR5xd8mn.QCPQmun8DK2vQQrf7t9T7rjwXdC4.w2oSUgi2K0'
+    password: '$6$0sug.McAubwAZhjZ$DqmFIFeFirECTt2oTXsjHD2mZNs2OhNfNz/8u43HbhOekkYF82i1K3MTJwlbfFnc4jRfneW.HI.in68UqYVfc0'
     generate_ssh_key: yes
     state: present
   become: yes
