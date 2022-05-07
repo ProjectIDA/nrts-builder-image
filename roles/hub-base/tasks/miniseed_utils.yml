@@ -69,7 +69,8 @@
 
 - name: install miniseed/ringserver utils
   shell: |
-    install -o root -g root -m 755 {{ build_root }}/dataselect-3.22/dataselect {{ deploy_root }}
+    install -o root -g root -m 755 {{ item }} {{ deploy_root }}
+    # install -o root -g root -m 755 {{ build_root }}/dataselect-3.22/dataselect {{ deploy_root }}
   become: true
   loop:
     - "{{ build_root }}/dataselect-3.22/dataselect"
