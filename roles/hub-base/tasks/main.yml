@@ -378,3 +378,7 @@
   become_user: nrts
   become: yes
 
+- name: install vim plugins
+  ansible.builtin.shell: vim +'PlugInstall --sync' +qa
+  become_user: nrts
+  become: yes
