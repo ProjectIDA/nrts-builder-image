@@ -81,6 +81,7 @@
     - { src: iwvrc,     dest: .iwvrc }
     - { src: pathrc,    dest: .pathrc }
     - { src: platform,  dest: .platform }
+    - { src: vimrc,     dest: .vimrc }
   # become_method: su
   become_user: nrts
   become: yes

@@ -373,3 +373,8 @@
     backup: yes
   become: true
 
+- name: install vim-plug
+  ansible.builtin.shell: curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  become_user: nrts
+  become: yes
+
