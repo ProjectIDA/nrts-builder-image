@@ -292,7 +292,7 @@
   file:
     name: "{{ nrts_home_dir }}"
     state: directory
-    mode: 02775
+    mode: 02755
     owner: nrts
     group: nrts
   become: yes
