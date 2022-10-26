@@ -44,7 +44,7 @@
     },
     {
         "type": "ansible",
-        "extra_arguments": [ "-vvv",
+        "extra_arguments": [ "-vv",
             "--extra-vars", "home_location=/home git_branch=master"
         ],
         "ansible_ssh_extra_args":"-o IdentitiesOnly=yes -o HostkeyAlgorithms=ssh-rsa -o PubkeyAcceptedAlgorithms=ssh-rsa",
