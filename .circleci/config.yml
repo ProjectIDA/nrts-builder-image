@@ -34,6 +34,14 @@ jobs:
       - run:
           name: check ansible version
           command: ansible-playbook --version
+      - run:   
+          name: add rsa to .ssh/config
+          command: echo "PubkeyAcceptedAlgorithms ssh-rsa" >> .ssh/config
+      - run:   
+          name: add rsa to .ssh/config
+          command: echo "HostkeyAlgorithms ssh-rsa" >> .ssh/config
+
+        
       # - add_ssh_keys:
       #     fingerprints:
       #       - "46:c3:58:83:04:93:90:8f:a4:1f:e3:8f:56:70:a4:d8"
