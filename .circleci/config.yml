@@ -5,6 +5,7 @@ jobs:
       - image: cimg/python:3.8
         environment:
           PACKER_VER: 1.8.0
+    resource_class: large
     steps:
       - run:
           name: Install unzip
