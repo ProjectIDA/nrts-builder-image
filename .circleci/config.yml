@@ -34,6 +34,9 @@ jobs:
       - run:
           name: check ansible version
           command: ansible-playbook --version
+      - run:
+          name: create .ssh/config
+          command: touch .ssh/config; chmod 644 .ssh/config
       - run:   
           name: add rsa to .ssh/config
           command: echo "PubkeyAcceptedAlgorithms ssh-rsa" >> .ssh/config
