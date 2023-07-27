@@ -20,7 +20,7 @@
         "associate_public_ip_address": true,
         "subnet_id": "{{user `subnet_id`}}",
         "ami_name": "{{user `ami_name`}}",
-        "ami_regions": ["us-west-2", "us-east-2", "me-south-1"],
+        "ami_regions": ["us-west-2", "us-east-2"],
         "source_ami_filter": {
             "filters": {
                 "virtualization-type": "hvm",
