@@ -19,6 +19,9 @@ jobs:
             unzip /tmp/packer-${PACKER_VER}.zip -d /tmp/packer
             sudo mv /tmp/packer/* /usr/local/
       - run:
+          name: run packer init so packer plugins get installed"
+          command: /usr/local/packer init build-nrts-hub-ec2-ami.json
+      - run:
           name: apt-get Update
           command: sudo apt-get update
       - run:
@@ -33,9 +36,6 @@ jobs:
       - run:
           name: check ansible version
           command: ansible-playbook --version
-      - run:
-          name: run packer init so packer plugins get installed"
-          command: /usr/local/packer init build-nrts-hub-ec2-ami.json
       - run:
           name: Validate aws ami config
           command: /usr/local/packer validate  -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-nrts-hub-ec2-ami.json
