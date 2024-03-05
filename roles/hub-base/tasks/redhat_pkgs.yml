@@ -1,16 +1,16 @@
 # os_family == 'redhat' SYSTEM SPECIFIC
-- name: Enable EPEL repo on AWS EC2 Amazon Linux 2 Instances
-  shell: |
-    amazon-linux-extras install epel -y
-  when: is_ec2
-  become: true
+# - name: Enable EPEL repo on AWS EC2 Amazon Linux 2 Instances
+#   shell: |
+#     amazon-linux-extras install epel -y
+#   when: is_ec2
+#   become: true
 
-- name: Enable EPEL repo on Centos 7 OSes
-  yum:
-    name: epel-release
-    # baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
-  when: not cloudstat.stat.isdir is defined and ansible_facts['os_family'] == "RedHat"
-  become: true
+# - name: Enable EPEL repo on Centos 7 OSes
+#   yum:
+#     name: epel-release
+#     # baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+#   when: not cloudstat.stat.isdir is defined and ansible_facts['os_family'] == "RedHat"
+#   become: true
 
 - name: install system pkgs
   yum:
