@@ -19,8 +19,8 @@ jobs:
             unzip /tmp/packer-${PACKER_VER}.zip -d /tmp/packer
             sudo mv /tmp/packer/* /usr/local/
       - run:
-          name: run packer init so packer plugins get installed"
-          command: /usr/local/packer init build-nrts-hub-ec2-ami.json
+          name: install packer ansible plugin"
+          command: /usr/local/packer plugins install github.com/hashicorp/ansible
       - run:
           name: apt-get Update
           command: sudo apt-get update
