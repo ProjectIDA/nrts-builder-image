@@ -27,8 +27,8 @@
                 "name": "al2023-ami-2023.2*",
                 "root-device-type": "ebs"
             },
-            "owner": ["137112412989"],
-            "most_recent": true
+            "most_recent": true,
+            "owners": ["137112412989"]
         },
         "run_tags": {
             "Name": "packer-build-image"
