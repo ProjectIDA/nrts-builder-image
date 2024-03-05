@@ -4,7 +4,7 @@ jobs:
     docker:    
       - image: cimg/python:3.9
         environment:
-          PACKER_VER: 1.9.5
+          PACKER_VER: 1.10.1
     resource_class: large
     steps:
       - run:
@@ -33,7 +33,10 @@ jobs:
       - run:
           name: check ansible version
           command: ansible-playbook --version
-      - run: 
+      - run:
+          name: run packer init so packer plugins get installed"
+          command: /usr/local/packer init build-nrts-hub-ec2-ami.json
+      - run:
           name: Validate aws ami config
           command: /usr/local/packer validate  -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-nrts-hub-ec2-ami.json
       - run:
