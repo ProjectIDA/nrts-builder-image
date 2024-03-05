@@ -48,9 +48,9 @@
             "--extra-vars", "home_location=/home git_branch=master"
         ],
         "ansible_ssh_extra_args":[
-            "-oIdentitiesOnly=yes ",
-            "-oHostkeyAlgorithms=ssh-rsa ",
-            "-oPubkeyAcceptedAlgorithms=ssh-rsa "
+            "-o", "IdentitiesOnly=yes ",
+            "-o", "HostkeyAlgorithms=ssh-rsa ",
+            "-o", "PubkeyAcceptedAlgorithms=ssh-rsa "
         ],
         "playbook_file": "./prov-nrts-builder-image.yml"
     }]
