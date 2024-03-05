@@ -24,32 +24,30 @@
         "source_ami_filter": {
             "filters": {
                 "virtualization-type": "hvm",
-                "name": "amzn2-ami-hvm*",
+                "name": "al2023-ami-2023.2*",
                 "root-device-type": "ebs"
             },
-            "owners": ["137112412989"],
             "most_recent": true
         },
         "run_tags": {
             "Name": "packer-build-image"
         }
-    }],
-    "provisioners": [{
-        "type": "shell",
-        "inline": "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
-    },
-    {
-        "type": "shell",
-        "inline": "ls -l ~/.ssh"
-    },
-    {
-        "type": "ansible",
-        "extra_arguments": [ "-vv",
+        }],
+        "provisioners": [{
+            "type": "shell",
+            "inline": "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
+        },
+        {
+            "type": "shell",
+            "inline": "ls -l ~/.ssh"
+        },
+        {
+            "type": "ansible",
+            "extra_arguments": [ "-vv",
             "--extra-vars", "home_location=/home git_branch=master"
-        ],
-        "ansible_ssh_extra_args":[
-            "-o IdentitiesOnly=yes "
-        ],
-        "playbook_file": "./prov-nrts-builder-image.yml"
-    }]
-}
+            ],
+            "ansible_ssh_extra_args":[ "-o IdentitiesOnly=yes" ],
+            "playbook_file": "./prov-nrts-builder-image.yml"
+        }]
+    }
+    
