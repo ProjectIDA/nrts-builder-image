@@ -3,9 +3,9 @@
         "aws_access_key": "{{user `AWSKEY`}}",
         "aws_secret_key": "{{user `AWSSECRET`}}",
         "ami_name": "ida-nrts-hub",
-        "aws_region": "us-west-2",
+        "aws_region": "us-east-2",
         "ssh_username": "ec2-user",
-        "vpc_id": "vpc-7be41303",
+        "vpc_id": "vpc-0b63f5f53901d0dec",
         "subnet_id": "subnet-0a9e19fa2b53685f0"
     },
     "builders": [{
@@ -24,7 +24,7 @@
         "source_ami_filter": {
             "filters": {
                 "virtualization-type": "hvm",
-                "name": "al2023-ami-2023.*",
+                "name": "al2023-ami-2023*",
                 "root-device-type": "ebs"
             },
             "most_recent": true,
