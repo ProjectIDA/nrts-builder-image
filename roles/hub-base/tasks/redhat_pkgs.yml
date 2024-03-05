@@ -20,28 +20,29 @@
   become: true
   vars:
     pkgs: 
+      - chrony
+      - cronie
       - openssh
       - make
       - zlib-devel
       - wget
-      - gcc
       - ncurses-devel
       - libxml2-devel
+      - gcc
       - tcsh
       - vim
   #    - ntp
-      - chrony
       - git
+      - golang
+      - iftop
+      - jq
       - lsof
       - man-pages
-      # - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-      - iftop
-      - xorriso
-      - tree
-      - golang
       - net-snmp
+      # - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      - tree
       - unzip
-      - jq
+      - xorriso
   tags:
     base
 #    - epel-release
