@@ -4,7 +4,7 @@ jobs:
     docker:    
       - image: cimg/python:3.9
         environment:
-          PACKER_VER: 1.8.0
+          PACKER_VER: 1.9.5
     resource_class: large
     steps:
       - run:
