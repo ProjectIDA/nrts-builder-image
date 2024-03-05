@@ -27,6 +27,7 @@
                 "name": "al2023-ami-2023.2*",
                 "root-device-type": "ebs"
             },
+            "owner": ["137112412989"],
             "most_recent": true
         },
         "run_tags": {
