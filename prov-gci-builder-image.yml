@@ -31,6 +31,7 @@
         name: "{{ item }}"
         append: true
         groups: 'docker'
+      become: true
       loop:
         - "nrts"
         - "ec2-user"
