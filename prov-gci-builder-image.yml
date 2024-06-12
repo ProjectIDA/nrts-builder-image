@@ -25,6 +25,5 @@
         pkgs: 
           - docker
           - gnupg2-full
-          - gpg-agent
 
 
