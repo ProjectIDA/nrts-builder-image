@@ -28,13 +28,12 @@
 
     - name: add users to docker group for C&C
       ansible.builtin.user:
-        name: "{{ users }}"
+        name: "{{ item }}"
         append: true
         groups: 'docker'
-        var:
-          users:
-            - nrts
-            - ec2-user
+        loop:
+          - nrts
+          - ec2-user
     
     - name: start docker daemon
       ansible.builtin.systemd_service:
