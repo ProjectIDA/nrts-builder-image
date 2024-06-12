@@ -14,15 +14,6 @@
     - debug:
         msg: "git_branch: {{ git_branch }}"
 
-    - import_role:
-        name: hub-base
-      vars:
-        nrts_src_version: ""  # currently unused, but should in future, pull from github "release" version
-        system_hostname: nrtshub
-        home_root: "{{ home_location }}"
-        nrts_home_dir : "{{ home_location }}/nrts"
-        git_src_branch: "{{ git_branch }}"
-
     - name: install system pkgs
       ansible.builtin.dnf:
         name: "{{ pkgs }}"
