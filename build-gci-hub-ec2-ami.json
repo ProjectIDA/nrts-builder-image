@@ -48,7 +48,7 @@
         "--extra-vars", "home_location=/home git_branch=master"
         ],
         "ansible_ssh_extra_args":[ "-o IdentitiesOnly=yes" ],
-        "playbook_file": "./prov-nrts-builder-image.yml"
+        "playbook_file": "./prov-gci-builder-image.yml"
     }]
     }
     
