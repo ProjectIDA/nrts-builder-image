@@ -31,9 +31,9 @@
         name: "{{ item }}"
         append: true
         groups: 'docker'
-        loop:
-          - "nrts"
-          - "ec2-user"
+      loop:
+        - "nrts"
+        - "ec2-user"
     
     - name: start docker daemon
       ansible.builtin.systemd_service:
