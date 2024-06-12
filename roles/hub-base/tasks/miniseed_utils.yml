@@ -53,7 +53,7 @@
 #     - miniseed
     
 - name: build miniseed/ringserver utils
-  make:
+  community.general.make:
     chdir: "{{ build_root }}/{{ item.dir }}"
   loop:
     - { dir: dataselect-3.22/libmseed }
