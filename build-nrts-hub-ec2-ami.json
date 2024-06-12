@@ -2,7 +2,7 @@
     "variables": {
         "aws_access_key": "{{user `AWSKEY`}}",
         "aws_secret_key": "{{user `AWSSECRET`}}",
-        "ami_name": "ida-nrts-hub",
+        "ami_name": "{{user `ami_name`}}",
         "aws_region": "us-east-2",
         "ssh_username": "ec2-user",
         "vpc_id": "vpc-0b63f5f53901d0dec",
@@ -20,7 +20,7 @@
         "associate_public_ip_address": true,
         "subnet_id": "{{user `subnet_id`}}",
         "ami_name": "{{user `ami_name`}}",
-        "ami_regions": ["us-west-2", "us-east-2"],
+        "ami_regions": ["us-east-2"],
         "source_ami_filter": {
             "filters": {
                 "virtualization-type": "hvm",
@@ -34,22 +34,22 @@
         "run_tags": {
             "Name": "packer-build-image"
         }
-        }],
-        "provisioners": [{
-            "type": "shell",
-            "inline": "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
-        },
-        {
-            "type": "shell",
-            "inline": "ls -l ~/.ssh"
-        },
-        {
-            "type": "ansible",
-            "extra_arguments": [ "-vv",
-            "--extra-vars", "home_location=/home git_branch=master"
-            ],
-            "ansible_ssh_extra_args":[ "-o IdentitiesOnly=yes" ],
-            "playbook_file": "./prov-nrts-builder-image.yml"
-        }]
+    }],
+    "provisioners": [{
+        "type": "shell",
+        "inline": "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
+    },
+    {
+        "type": "shell",
+        "inline": "ls -l ~/.ssh"
+    },
+    {
+        "type": "ansible",
+        "extra_arguments": [ "-vv",
+        "--extra-vars", "home_location=/home git_branch=master"
+        ],
+        "ansible_ssh_extra_args":[ "-o IdentitiesOnly=yes" ],
+        "playbook_file": "./prov-nrts-builder-image.yml"
+    }]
     }
     
