@@ -24,7 +24,7 @@
         "source_ami_filter": {
             "filters": {
                 "virtualization-type": "hvm",
-                "name": "{{user `source_ami_name`}}",
+                "image-id": "{{user `source_ami_name`}}",
                 "root-device-type": "ebs",
                 "architecture": "x86_64"
             },
