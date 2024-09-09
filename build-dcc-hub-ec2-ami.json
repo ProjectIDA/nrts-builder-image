@@ -29,7 +29,7 @@
                 "architecture": "x86_64"
             },
             "most_recent": true,
-            "owners": ["099720109477"]
+            "owners": ["{{user `source_ami_owner`}}"]
         },
         "run_tags": {
             "Name": "packer-DCC-image"
