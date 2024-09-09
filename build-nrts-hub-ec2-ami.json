@@ -46,7 +46,7 @@
     {
         "type": "ansible",
         "extra_arguments": [ "-vv",
-        "--extra-vars", "home_location=/home git_branch=master"
+        "--extra-vars", "home_location=/home git_branch=master allow_world_readable_tmpfiles=true"
         ],
         "ansible_ssh_extra_args":[ "-o IdentitiesOnly=yes" ],
         "playbook_file": "./prov-nrts-builder-image.yml"
