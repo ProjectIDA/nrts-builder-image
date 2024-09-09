@@ -28,7 +28,8 @@
                 "root-device-type": "ebs",
                 "architecture": "x86_64"
             },
-            "most_recent": true
+            "most_recent": true,
+            "owners": ["099720109477"]
         },
         "run_tags": {
             "Name": "packer-DCC-image"
