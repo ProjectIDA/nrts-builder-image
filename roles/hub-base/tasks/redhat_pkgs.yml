@@ -8,6 +8,7 @@
   become: true
   vars:
     pkgs: 
+      - acl
       - chrony
       - cronie
       - openssh
