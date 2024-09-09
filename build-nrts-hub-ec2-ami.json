@@ -24,7 +24,7 @@
         "source_ami_filter": {
             "filters": {
                 "virtualization-type": "hvm",
-                "name": "al2023-ami-2023*",
+                "name": "al2023-ami*",
                 "root-device-type": "ebs",
                 "architecture": "x86_64"
             },
