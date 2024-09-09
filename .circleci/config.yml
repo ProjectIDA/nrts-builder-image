@@ -45,18 +45,18 @@ jobs:
       - run:
           name: Build dcc-hub aws packer ami config (built on ubuntu/debian)
           command: /usr/local/packer build -var "ami_name=dcc-hub"  -var "source_ami_name=ami-003932de22c285676" -var "source_ami_owner=099720109477" -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-dcc-hub-ec2-ami.json
-      - run:
-          name: Validate ida-nrts-hub aws packer ami config
-          command: /usr/local/packer validate -var "ami_name=ida-nrts-hub" -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-nrts-hub-ec2-ami.json
-      - run:
-          name: Build ida-nrts-hub with aws packer ami image
-          command: /usr/local/packer build -var "ami_name=ida-nrts-hub" -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-nrts-hub-ec2-ami.json 
-      - run:
-          name: Validate gci-hub aws packer ami config
-          command: /usr/local/packer validate -var "ami_name=gci-hub"  -var "source_ami_name=ida-nrts-hub" -var "source_ami_owner=863634277693" -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-gci-hub-ec2-ami.json
-      - run:
-          name: Build gci-hub with aws packer ami image
-          command: /usr/local/packer build -var "ami_name=gci-hub" -var "source_ami_name=ida-nrts-hub" -var "source_ami_owner=863634277693" -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-gci-hub-ec2-ami.json 
+    #   - run:
+    #       name: Validate ida-nrts-hub aws packer ami config
+    #       command: /usr/local/packer validate -var "ami_name=ida-nrts-hub" -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-nrts-hub-ec2-ami.json
+    #   - run:
+    #       name: Build ida-nrts-hub with aws packer ami image
+    #       command: /usr/local/packer build -var "ami_name=ida-nrts-hub" -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-nrts-hub-ec2-ami.json 
+    #   - run:
+    #       name: Validate gci-hub aws packer ami config
+    #       command: /usr/local/packer validate -var "ami_name=gci-hub"  -var "source_ami_name=ida-nrts-hub" -var "source_ami_owner=863634277693" -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-gci-hub-ec2-ami.json
+    #   - run:
+    #       name: Build gci-hub with aws packer ami image
+    #       command: /usr/local/packer build -var "ami_name=gci-hub" -var "source_ami_name=ida-nrts-hub" -var "source_ami_owner=863634277693" -var "AWSKEY=${aws_access_key_id}" -var "AWSSECRET=${aws_secret_access_key}" build-gci-hub-ec2-ami.json 
 
 
 
