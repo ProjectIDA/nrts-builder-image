@@ -24,12 +24,11 @@
         "source_ami_filter": {
             "filters": {
                 "virtualization-type": "hvm",
-                "name": "al2023-ami*",
+                "name": "{{user `source_ami_name`}}",
                 "root-device-type": "ebs",
                 "architecture": "x86_64"
             },
-            "most_recent": true,
-            "owners": ["137112412989"]
+            "most_recent": true
         },
         "run_tags": {
             "Name": "packer-DCC-image"
