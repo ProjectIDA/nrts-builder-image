@@ -1,0 +1,26 @@
+---
+- name: Provision AMI image with IDA NRTS
+  remote_user: ubuntu
+  hosts: default
+  vars:
+    # allow_world_readable_tmpfiles: true
+    target_major_version: "{{ ansible_facts['distribution_major_version'] }}"
+    target_family: "{{ ansible_facts['os_family']|lower }}"
+    target: "{{ target_family }}{{ target_major_version }}"
+
+  tasks:
+    - debug:
+        msg: "home_location: {{ home_location }}"
+
+    - debug:
+        msg: "git_branch: {{ git_branch }}"
+
+    - import_role:
+        name: hub-base
+      vars:
+        nrts_src_version: ""  # currently unused, but should in future, pull from github "release" version
+        system_hostname: nrtshub
+        home_root: "{{ home_location }}"
+        nrts_home_dir : "{{ home_location }}/nrts"
+        git_src_branch: "{{ git_branch }}"
+
