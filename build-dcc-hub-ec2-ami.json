@@ -4,7 +4,7 @@
         "aws_secret_key": "{{user `AWSSECRET`}}",
         "ami_name": "{{user `ami_name`}}",
         "aws_region": "us-east-2",
-        "ssh_username": "ec2-user",
+        "ssh_username": "ubuntu",
         "vpc_id": "vpc-0b63f5f53901d0dec",
         "subnet_id": "subnet-0946e737a30958159"
     },
