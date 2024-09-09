@@ -1,0 +1,51 @@
+# os_family == 'debian' SYSTEM SPECIFIC
+
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
+  become: true
+
+- name: install system pkgs
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  become: true
+  loop: 
+    - acl
+    - chrony
+    - cron
+    - gcc
+    - git
+    - golang
+    - iftop
+    - jq
+    - libxml2-dev
+    - lsof
+    - make
+    - manpages-posix
+    - ncurses-base
+    - ntp
+    - snmp
+    - openssh-client
+    - openssh-server
+    - rsyslog
+    - tcsh
+    - tree
+    - unzip
+    - vim
+    - wget
+    - zlib1g-dev
+    - bzip2
+    - libasound2-dev
+    - libatomic1
+    - libegl1
+    - libfontconfig1
+    - libgl1
+    - libxcomposite-dev
+    - libxdamage-dev
+    - libxkbcommon-dev
+    - libxkbfile-dev
+    - libxrandr-dev
+    - libxrender-dev
+    - libxtst-dev

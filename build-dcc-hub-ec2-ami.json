@@ -3,8 +3,6 @@
         "aws_access_key": "{{user `AWSKEY`}}",
         "aws_secret_key": "{{user `AWSSECRET`}}",
         "ami_name": "{{user `ami_name`}}",
-        "source_ami_name": "{{user `source_ami_name`}}",
-        "source_ami_owner": "{{user ` source_ami-owner`}}",
         "aws_region": "us-east-2",
         "ssh_username": "ec2-user",
         "vpc_id": "vpc-0b63f5f53901d0dec",
@@ -25,13 +23,16 @@
         "ami_regions": ["us-east-2"],
         "source_ami_filter": {
             "filters": {
-                "name": "{{user `source_ami_name`}}"
+                "virtualization-type": "hvm",
+                "name": "al2023-ami*",
+                "root-device-type": "ebs",
+                "architecture": "x86_64"
             },
             "most_recent": true,
-            "owners": ["{{user `source_ami_owner`}}"]
+            "owners": ["137112412989"]
         },
         "run_tags": {
-            "Name": "packer-GCI-image"
+            "Name": "packer-DCC-image"
         }
     }],
     "provisioners": [{
@@ -48,7 +49,7 @@
         "--extra-vars", "home_location=/home git_branch=master"
         ],
         "ansible_ssh_extra_args":[ "-o IdentitiesOnly=yes" ],
-        "playbook_file": "./prov-gci-builder-image.yml"
+        "playbook_file": "./prov-nrts-builder-image.yml"
     }]
     }
     

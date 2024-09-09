@@ -11,6 +11,7 @@
       - acl
       - chrony
       - cronie
+      - csh
       - openssh
       - make
       - zlib-devel
@@ -30,7 +31,7 @@
       - rsyslog
       - tree
       - unzip
-      - xorriso
+      # - xorriso
   tags:
     base
 

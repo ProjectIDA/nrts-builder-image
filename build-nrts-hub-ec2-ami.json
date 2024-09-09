@@ -32,7 +32,7 @@
             "owners": ["137112412989"]
         },
         "run_tags": {
-            "Name": "packer-build-image"
+            "Name": "packer-nrts-image"
         }
     }],
     "provisioners": [{
