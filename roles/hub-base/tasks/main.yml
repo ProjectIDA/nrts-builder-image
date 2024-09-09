@@ -71,7 +71,7 @@
 
 - name: chrony - debian (not going to use ntpd)
   # ignore errors in case chrony not installed
-  service:
+  ansible.builtin.systemd_service:
     name: chrony.service
     state: started
     enabled: yes
