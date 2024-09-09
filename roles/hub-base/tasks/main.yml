@@ -81,17 +81,17 @@
   tags:
     base
 
-- name: make sure local subnets can query ntp deamon
-  lineinfile:
-    path: /etc/chrony.conf
-    regexp: "^ *allow *127.0.0.1"
-    insertafter: "^ *allow"
-    line: 'allow 127.0.0.1'
-    state: present
-    backup: yes
-  become: true
-  tags:
-    base
+# - name: make sure local subnets can query ntp deamon
+#   lineinfile:
+#     path: /etc/chrony.conf
+#     regexp: "^ *allow *127.0.0.1"
+#     insertafter: "^ *allow"
+#     line: 'allow 127.0.0.1'
+#     state: present
+#     backup: yes
+#   become: true
+#   tags:
+#     base
 
 # Additional CHRONY.CONF customizations will happen in configure step
 
