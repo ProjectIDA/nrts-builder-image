@@ -3,6 +3,7 @@
   remote_user: ec2-user
   hosts: default
   vars:
+    allow_world_readable_tmpfiles: true
     target_major_version: "{{ ansible_facts['distribution_major_version'] }}"
     target_family: "{{ ansible_facts['os_family']|lower }}"
     target: "{{ target_family }}{{ target_major_version }}"
