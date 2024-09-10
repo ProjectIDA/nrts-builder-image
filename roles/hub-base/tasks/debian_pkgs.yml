@@ -25,10 +25,12 @@
     - make
     - manpages-posix
     - ncurses-base
+    - net-tools
     - ntp
     - snmp
     - openssh-client
     - openssh-server
+    - plocate
     - rsyslog
     - tcsh
     - tree

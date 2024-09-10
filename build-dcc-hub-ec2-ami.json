@@ -46,7 +46,7 @@
     {
         "type": "ansible",
         "extra_arguments": [ "-vvv",
-        "--extra-vars", "home_location=/home git_branch=master"
+        "--extra-vars", "home_location=/home git_branch=master hub_personality={{user `hub_personality`}}"
         ],
         "ansible_ssh_extra_args":[ "-o IdentitiesOnly=yes" ],
         "playbook_file": "./prov-dcc-builder-image.yml"

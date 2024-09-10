@@ -22,5 +22,7 @@
         system_hostname: nrtshub
         home_root: "{{ home_location }}"
         nrts_home_dir : "{{ home_location }}/nrts"
+        gsndcc_home_dir : "{{ home_location }}/gsndcc"
         git_src_branch: "{{ git_branch }}"
+        hub_personality: "{{ hub_personality }}"
 

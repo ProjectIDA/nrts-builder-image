@@ -135,79 +135,6 @@
   tags:
     base
 
-# - name: Set ssh_pwauth to 'true' for cloud_init cfg
-#   replace:
-#     path: /etc/cloud/cloud.cfg
-#     regexp: '^ *ssh_pwauth: * false'
-#     replace: 'ssh_pwauth: true'
-#     backup: yes
-#   become: true
-#   tags:
-#     base
-
-# - name: clear out users to start from scratch
-#   user:
-#     name: "{{ item }}"
-#     local: yes
-#     state: absent
-#     remove: yes
-#   become: yes
-#   loop:
-#     - nrts
-#     - tunnel
-#   tags:
-#     - usermods
-#   ignore_errors: True
-
-# - name: clean out groups to start from scratch
-#   group:
-#     name: "{{ item }}"
-#     local: yes
-#     state: absent
-#   become: yes
-#   loop:
-#     - nrts
-#     - tunnel
-#   tags:
-#     - usermods
-#   ignore_errors: True
-
-# - name: clean out home dirs
-#   file:
-#     name: "{{ home_root }}/{{ item }}"
-#     state: absent
-#   become: yes
-#   loop:
-#     - nrts
-#     - tunnel
-#   tags:
-#     - usermods
-
-####################################
-# Generate password with python:
-#   python3 -c "from passlib.hash import sha512_crypt; import getpass; print(sha512_crypt.using(rounds=5000).hash(getpass.getpass()))"
-# is tcsh location system specific?
-# creating tunnel user even though only used on HUB systems that use ssh remote tunnels to pull from station
-# - name: Make sure user NRTS is in local user DB
-#   lineinfile:
-#     path: /etc/passwd
-#     regexp: '^nrts:'
-#     line: "nrts:x:4000:4000:NRTS System User:{{ nrts_home_dir }}:/bin/tcsh"
-#   become: yes
-#   tags:
-#     - usermods
-
-####################################################################
-# need to do some shenanigans manually due to OD users and groups
-# group 4000 tied to IGPP OG ssh group 'nrts' for ssh access to host
-# NEED TO RIP THIS OUTTA HERE and make this independent of IGPP/OD
-# - name: Create LOCAL nrts group (guid=4000)
-#   shell:
-#     lgroupadd -g 4000 nrts
-#   become: yes
-#   tags:
-#     - usermods
-####################################################################
 - name: Create LOCAL NRTS Group with (guid=4000)
   ansible.builtin.group:
     name: nrts
@@ -221,7 +148,18 @@
 ####################################
 # Generate password with python:
 #   python3 -c "from passlib.hash import sha512_crypt; import getpass; print(sha512_crypt.using(rounds=5000).hash(getpass.getpass()))"
-####################################################################
+####################################
+- name: Create LOCAL GSNDCC Group with (guid=4001)
+  ansible.builtin.group:
+    name: gsndcc
+    state: present
+    gid: 4001
+    # local: yes
+  when: hub_personality == "dcc"
+  become: yes
+  tags:
+    - usermods
+
 - name: Create LOCAL user NRTS
   ansible.builtin.user:
     name: nrts
@@ -237,26 +175,21 @@
   tags:
     - usermods
 
-
-# - name: Create LOCAL user NRTS
-#   shell: |
-#     luseradd -u 4000 -d {{ nrts_home_dir }} -s /bin/tcsh -p '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00' nrts
-#     mkdir {{ nrts_home_dir }}/.ssh
-#     ssh-keygen -t rsa -b 2048 -N '' -f {{ nrts_home_dir}}/.ssh/id_rsa
-#     chown -R nrts:nrts {{ nrts_home_dir}}/.ssh
-#     chmod 700 {{ nrts_home_dir }}/.ssh
-#   # ansible bug in user module that inserts 'useradd' options that are unsupported by 'luseradd'
-#   # user:
-#   #   name: nrts
-#   #   local: yes
-#   #   password: '$6$xyyuDEOrBdwBfx.4$e0.4QB8TQk4eyWk6KiCgSIgFSIgozR7K0W0.9XyyV14fBRsWhWrxaMjrRP12/ZT6FiCkdTpWoeyVHV4apazw00'
-#   #   state: present
-#   #   home: "{{ nrts_home_dir }}"
-#   #   shell: /bin/tcsh
-#   #   generate_ssh_key: yes
-#   become: yes
-#   tags:
-#     - usermods
+- name: Create LOCAL user gsndcc
+  ansible.builtin.user:
+    name: gsndcc
+    # local: yes
+    uid: 4001
+    group: gsndcc
+    home: "{{ gsndcc_home_dir }}"
+    shell: /usr/bin/tcsh
+    password: '$6$iVMYfXaSisiDTAlL$0AJdchSr83nuP28JCrKsnoJrcCnDORJRxcKnu6ccYycsn3b2AG7EMPJRZPTX7OmgkyJRfz6S5f14kRKyQSxSM1'
+    generate_ssh_key: yes
+    state: present
+  when: hub_personality == "dcc"
+  become: yes
+  tags:
+    - usermods
 
 - name: Create LOCAL user TUNNEL
   ansible.builtin.user:
@@ -268,24 +201,10 @@
     groups: nrts
     shell: /sbin/nologin
     generate_ssh_key: yes
+  when: hub_personality == "nrts"
   become: yes
   tags:
     - usermods
-
-
-####################################################################
-# need to do some shenanigans manually due to OD users and groups
-# group 4000 tied to IGPP OG ssh group 'nrts' for ssh access to host
-# NEED TO RIP THIS OUTTA HERE and make this independent of IGPP/OD
-# - name: Assign users NRTS and TUNNEL to group NRTS (guid = 4000)
-#   shell: lusermod -g 4000 {{ item }}
-#   become: yes
-#   loop:
-#     - nrts
-#     - tunnel
-#   tags:
-#     - usermods
-####################################################################
 
 # requires nrts_home_dir
 - name: Set mode on NRTS home dir
