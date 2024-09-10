@@ -229,19 +229,28 @@
     backup: yes
   become: true
 
-- name: update perms on homedirs
+- name: update perms on TUNNEL homedir
   file:
-    path: "{{ home_root }}/{{ item }}"
+    path: "{{ home_root }}/tunnel"
     state: directory
-    owner: "{{ item }}"
-    group: "{{ item }}"
+    owner: tunnel
+    group: tunnel
+    mode: "g+rx"
+  when: hub_personality == "nrts"
+  become: true
+  tags:
+    nrtsbuild
+
+- name: update perms on NRTS homedirs
+  file:
+    path: "{{ home_root }}/nrts"
+    state: directory
+    owner: nrts
+    group: nrts
     mode: "g+rx"
   become: true
   tags:
     nrtsbuild
-  loop:
-    - nrts
-    - tunnel
 
 # requires nrts_home_dir 
 # MAY NEED TO CUSTOMIZE FOR DEBIAN
