@@ -213,7 +213,7 @@
     name: nrts
     state: present
     gid: 4000
-    local: yes
+    # local: yes
   become: yes
   tags:
     - usermods
@@ -225,7 +225,7 @@
 - name: Create LOCAL user NRTS
   ansible.builtin.user:
     name: nrts
-    local: yes
+    # local: yes
     uid: 4000
     group: nrts
     home: "{{ nrts_home_dir }}"
