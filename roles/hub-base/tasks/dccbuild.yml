@@ -8,6 +8,6 @@
   loop:
     - { repo: dcc-scripts, target: scripts }
     - { repo: dcc-modules-py, target: modules-py }
-  tag:
+  tags:
     - dccbuild
 
