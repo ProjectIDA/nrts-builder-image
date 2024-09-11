@@ -28,7 +28,7 @@
 - name: build NRTS for DCC 
   shell:
     chdir:  "{{ build_root }}/build/nrts/nrts-src"
-    cmd: ./build.csh {{ deploy_root }} idadcc
+    cmd: ./build.csh /usr/local idadcc
   when: hub_personality == "dcc"
   become: yes
   become_user: nrts
