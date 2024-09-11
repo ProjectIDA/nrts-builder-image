@@ -25,12 +25,21 @@
   become: yes
   become_user: nrts
 
-- name: build nrts software
+- name: build NRTS for DCC 
+  shell:
+    chdir:  "{{ build_root }}/build/nrts/nrts-src"
+    cmd: ./build.csh {{ deploy_root }} idadcc
+  when: hub_personality == "dcc"
   become: yes
   become_user: nrts
+
+- name: build NRTS for nrts hub software
   shell:
     chdir:  "{{ build_root }}/build/nrts/nrts-src"
     cmd: ./build.csh {{ deploy_root }}
+  when: hub_personality == "nrts"
+  become: yes
+  become_user: nrts
 
 ##################################
 - name: create nrts system dirs

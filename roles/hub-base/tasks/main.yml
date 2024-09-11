@@ -277,9 +277,21 @@
   vars:
     build_root: "{{ nrts_home_dir }}"
     deploy_root: "{{ nrts_home_dir }}"
+    hub_personality: "{{ hub_personality }}"
   become: true
   tags:
     nrtsbuild
+
+- name: build/deploy DCC software
+  import_tasks: dccbuild.yml
+  vars:
+    # build_root: "{{ nrts_home_dir }}"
+    deploy_root: "/usr/local"
+    hub_personality: "{{ hub_personality }}"
+  # when: hub_personality == "dcc"
+  become: true
+  tags:
+    dccbuild
 
 - name: build 3rd party (IRIS) miniseed utilities
   import_tasks: miniseed_utils.yml
