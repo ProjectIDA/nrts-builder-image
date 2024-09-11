@@ -16,6 +16,7 @@
     - chrony
     - cron
     - gcc
+    - libgd-dev
     - git
     - golang
     - iftop
@@ -24,7 +25,7 @@
     - lsof
     - make
     - manpages-posix
-    - ncurses-base
+    - libncurses-dev
     - net-tools
     - ntp
     - snmp
