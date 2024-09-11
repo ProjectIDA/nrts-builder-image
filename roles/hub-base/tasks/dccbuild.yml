@@ -1,10 +1,10 @@
-- name: get NRTS source repository
+- name: get DCC source repositories
   ansible.builtin.git:
     repo: "https://github.com/projectida/{{ item.repo }}.git"
     dest: "{{ deploy_root }}/{{ item.target }}"
     accept_hostkey: yes
   become: yes
-  become_user: nrts
+  # become_user: nrts
   loop:
     - { repo: dcc-scripts, target: scripts }
     - { repo: dcc-modules-py, target: modules-py }
