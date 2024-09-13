@@ -33,11 +33,21 @@
   become: true
 
 - name: deploy IDA/GSN bash startup file
-  template:
-    src: dcc-bashrc
+  ansible.builtin.copy:
+    remote: false
+    src: ../templates/dcc-bashrc
     dest: /etc/bashrc
     backup: yes
   become: true
+
+- name: deploy aliases for user gsndcc
+  ansible.builtin.copy:
+    remote: false
+    src: ../templates/gsndcc-aliases
+    dest: ~/.aliases
+    backup: yes
+  become: true
+  become_user: gsndcc
 
 ##########################################
 ### PROBABLY DON'T NEED THESE as NRTS repo build.csh has environment built in
