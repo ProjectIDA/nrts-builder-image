@@ -292,6 +292,15 @@
   tags:
     dccbuild
 
+- name: Sys and User Config for DCC Hub
+  import_tasks: dcc_config.yml
+  # vars:
+  #   deploy_root: "/usr/local"
+  when: hub_personality == "dcc"
+  become: true
+  tags:
+    dccbuild
+
 - name: build 3rd party (IRIS) miniseed utilities
   import_tasks: miniseed_utils.yml
   vars:
