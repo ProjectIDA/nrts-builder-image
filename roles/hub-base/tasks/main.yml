@@ -273,6 +273,15 @@
     enabled: yes
   become: true
 
+- name: build/deploy DCC software
+  import_tasks: dccbuild.yml
+  vars:
+    deploy_root: "/usr/local"
+  when: hub_personality == "dcc"
+  become: true
+  tags:
+    dccbuild
+
 - name: build NRTS software
   import_tasks: nrtsbuild.yml
   vars:
@@ -282,15 +291,6 @@
   become: true
   tags:
     nrtsbuild
-
-- name: build/deploy DCC software
-  import_tasks: dccbuild.yml
-  vars:
-    deploy_root: "/usr/local"
-  when: hub_personality == "dcc"
-  become: true
-  tags:
-    dccbuild
 
 - name: Sys and User Config for DCC Hub
   import_tasks: dcc_config.yml

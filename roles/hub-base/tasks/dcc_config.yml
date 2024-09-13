@@ -21,6 +21,7 @@
     remote: false
     src: ../templates/path_add.csh
     dest: /usr/local/path_add.csh
+    mode: 775
     backup: yes
   become: true
 

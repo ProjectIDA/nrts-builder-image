@@ -9,7 +9,7 @@
 #
 # The StandardCshrc does NOT source ~/.cshrc.custom.
 
-foreach StandardCshrc (/ida/local/cshrc)
+foreach StandardCshrc (/usr/local/cshrc)
     if (-e $StandardCshrc) then
         set command = "source $StandardCshrc"
         $command
@@ -27,7 +27,5 @@ else
     set prompt = "${myname}@${nodename} \!> "
 endif
 
-set path=(. /ida/dcc/bin /ida/dcc/scripts $path)
+set path=(. /usr/local/bin /usr/local/scripts $path)
 source ~/.aliases
-
-setenv SEEDRESP /ida/dcc/response/RESP

@@ -1,28 +1,23 @@
 #  Aliases common to user iris
 
-alias ls /bin/ls -F
 alias m more
 alias mv '/bin/mv -i'
 alias su 'su -'
 
-alias b	back
-alias back	set back=$old; set old=$cwd; cd $back; unset back; dirs
-alias cd	set old=$cwd; chdir !*
 alias del	/bin/rm -i
 alias egrep	egrep --color=auto
 alias fgrep	fgrep --color=auto
 alias grep	grep --color=auto
 alias h	history
 alias j	jobs
-alias jobs	(jobs -l)
-alias ls	(/bin/ls -F)
+alias ls    /bin/ls -F
 alias l.	ls -d .* --color=auto
 alias ll	ls -l --color=auto
 alias la	ls -la --color=auto
-alias lo	clear; logout
 alias m	more
 alias mon	nrts_mon
 alias mv	/bin/mv -i
-alias pathadd	(source /usr/local/pathadd.csh)
-alias pid	ps aux | grep !* | grep -v grep
+alias pathadd	/usr/local/pathadd.csh
+alias pid 'ps -aux | egrep "(\!*|USER)" | egrep -v "(grep| ps -)"'
+alias pib 'ps -ax -o user,pid,%cpu,%mem,state,start,command | grep "\!*" | egrep -v "(grep| ps -)" | sort -k 7'
 alias vi	vim
