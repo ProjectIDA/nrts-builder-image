@@ -2,6 +2,7 @@
   ansible.builtin.cron:
     special_time: "reboot"
     job: "/usr/local/scripts/mount-s3fgw-gsn.sh"
+    name: "mount /gsn"
     # dest: "{{ deploy_root }}/{{ item.target }}"
   become: yes
   become_user: gsndcc
