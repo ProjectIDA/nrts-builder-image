@@ -1,0 +1,25 @@
+127.0.0.1 localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
+
+#
+132.239.4.71    idahub
+
+#AWS
+15.235.4.254  prihub-pub
+10.1.4.71     prihub prihub-priv
+3.13.125.127  sechub-pub
+10.2.4.71     sechub sechub-priv
+44.232.190.6  dmc-pri-pub
+10.11.2.72    dmc-pri dmc-pri-priv
+44.226.87.240 dmc-sec-pub
+10.11.3.72    dmc-sec dmc-sec-priv
+18.222.43.248 gcihub-pri
+10.2.4.72     gcihub

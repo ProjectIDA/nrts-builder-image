@@ -1,0 +1,50 @@
+- name: add /gsn mount script to crontab
+  ansible.builtin.cron:
+    special_time: "reboot"
+    job: "/usr/local/scripts/mount-s3fgw-gsn.sh"
+    dest: "{{ deploy_root }}/{{ item.target }}"
+  become: yes
+  become_user: gsndcc
+
+- name: deploy hosts
+  template:
+    src: dcc_hosts
+    dest: /etc/hosts
+    backup: yes
+  become: true
+
+- name: deploy path_add.csh
+  template:
+    src: path_add.csh
+    dest: /usr/local/path_add.csh
+    backup: yes
+  become: true
+
+- name: deploy IDA/GSN cshrc startup file
+  template:
+    src: dcc-cshrc
+    dest: /usr/local/cshrc
+    backup: yes
+  become: true
+
+- name: deploy IDA/GSN bash startup file
+  template:
+    src: dcc-bashrc
+    dest: /usr/local/bashrc
+    backup: yes
+  become: true
+
+##########################################
+### PROBABLY DON'T NEED THESE as NRTS repo build.csh has environment built in
+- name: deploy IDA/GSN dev startup files
+  template:
+    src: dcc-"{{ item }}"
+    dest: "/usr/local/{{ item }}"
+    backup: yes
+  loop:
+    - devenv.csh
+    - devenv.sh
+  become: true
+##########################################
+
+

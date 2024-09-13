@@ -1,0 +1,128 @@
+if (-d /etc/cloud) then
+    setenv GSN_STORAGE_ROOT /gsn
+else
+    setenv GSN_STORAGE_ROOT /ida
+endif
+
+set debug = 0
+
+set filec
+set fignore=( .o )
+umask 002
+set ignoreeof
+set noclobber
+set notify
+unset autologout
+
+set osver = `uname -r`
+set osname   = `uname -s | tr "[A-Z]" "[a-z]"`
+set nodename = `uname -n`
+set machine   = `uname -m`
+set ostype    = SVR4
+
+if (-e ${GSN_STORAGE_ROOT}/local/pathadd.csh) then
+   alias pathadd source ${GSN_STORAGE_ROOT}/local/pathadd.csh
+endif
+#
+# Common aliases
+alias pid 'ps aux | grep \!* | grep -v grep'
+
+# explicitly setting MANPATH based on man.config
+# due to /opt/passcal setting it without including system paths
+# then antelope just adds it's own path at top assuming
+# that system paths already included
+if (! $?MANPATH) then
+       setenv MANPATH `manpath`
+endif
+
+# Common enviroment variables
+if (! $?PAGER)    setenv PAGER more
+if (! $?EDITOR)   setenv EDITOR vim
+
+if ($osname == linux) then
+
+   set osver_len = `expr $osver : '[0-9]*\.[0-9]*'`
+   set osver     = `expr substr $osver 1 $osver_len`
+
+   if ($machine  == i386) set machine = i86pc
+   if ($machine  == i486) set machine = i86pc
+   if ($machine  == i586) set machine = i86pc
+   if ($machine  == i686) set machine = i86pc
+   if ($machine  == x86_64) set machine = i86pc
+
+   set localprefix = /usr/local
+
+   set optprefix = /opt
+
+   set applist = ""
+   set applist = "antelope $applist"
+
+   foreach application ($applist)
+       set startup = $optprefix/$application/setup.csh
+       if (-e $startup) then
+           set command = "source $startup"
+           if ($debug) echo $command
+           $command
+       endif
+   end
+
+   pathadd /bin force
+   pathadd /usr/bin force
+   pathadd $localprefix/bin force
+   pathadd $localprefix/scripts
+   pathadd ${GSN_STORAGE_ROOT}/local/bin after
+   pathadd ${GSN_STORAGE_ROOT}/dcc/scripts after
+   pathadd ${GSN_STORAGE_ROOT}/eng/scripts after
+   pathadd $localprefix/MATLAB/R2021a/bin force
+   pathadd $localprefix/geotool/bin
+
+   # set run-time library path to Antelope shared libs
+   setenv LD_LIBRARY_PATH $ANTELOPE/lib
+
+else if ($osname == darwin) then
+
+   set osver_len = `expr $osver : '[0-9]*\.[0-9]*'`
+   set osver     = `echo $osver | cut -c 1-$osver_len`
+
+   pathadd /bin
+   pathadd /usr/bin
+   pathadd ${GSN_STORAGE_ROOT}/local/bin
+   pathadd ${GSN_STORAGE_ROOT}/local/scripts
+
+endif
+
+set platform = $osname.$osver.$machine
+if ($debug) echo "MASTER platform = $platform"
+
+setenv NRTS_HOME ~nrts
+setenv BLOCKSIZE 1024
+
+setenv IDA_ARCHIVE_DIR ${GSN_STORAGE_ROOT}/archive
+setenv IDA_ARCHIVE_RAW_DIR ${GSN_STORAGE_ROOT}/archive/raw
+setenv IDA_ARCHIVE_MS_DIR ${GSN_STORAGE_ROOT}/archive/ms
+setenv IDA_ARCHIVE_DMC_DIR ${GSN_STORAGE_ROOT}/archive/dmc
+setenv IDA_QC_TMP_DIR ${GSN_STORAGE_ROOT}/tmp
+setenv IDA_CAL_ABS_SITEDATA_DIR ${GSN_STORAGE_ROOT}/cal/onsite_caltests
+setenv IDA_CAL_RAW_DIR ${GSN_STORAGE_ROOT}/cal/raw
+setenv IDA_CAL_ANALYSIS_DIR ${GSN_STORAGE_ROOT}/cal/analysis
+setenv IDA_CAL_SHAKETABLE_DIR ${GSN_STORAGE_ROOT}/cal/shaketable_tests
+setenv IDA_RESPONSES_CUR_DIR ${GSN_STORAGE_ROOT}/dcc/db/sensors
+setenv IDA_RESPONSES_NOM_DIR ${GSN_STORAGE_ROOT}/dcc/response/NOMINAL_RESPONSES
+setenv IDA_DATASCOPEDB_DIR ${GSN_STORAGE_ROOT}/dcc/db
+setenv IDA_NON_DMC_DATASCOPEDB_DIR ${GSN_STORAGE_ROOT}/dcc/db-non-dmc
+setenv IDA_SRC_INCLUDE ~/src/include
+setenv IDA_WEB_ROOT ${GSN_STORAGE_ROOT}/web
+setenv IDA_DCC_LOG_DIR ${GSN_STORAGE_ROOT}/log
+setenv IDA_STATIONXML_OUTPUT_DIR ${GSN_STORAGE_ROOT}/dcc/StationXML
+setenv IDA_STATUS_URL https://idastatus.projectida.net
+
+setenv SEEDRESP ${GSN_STORAGE_ROOT}/dcc/response/RESP
+
+setenv PYTHONPATH /usr/local/modules-py
+
+
+# Customize the prompt
+set prompt="$USER@$nodename \!> "
+
+if ($?TERM && $TERM == 'xterm') setenv TERM xterm-256color
+if (! $?TERM) setenv TERM xterm

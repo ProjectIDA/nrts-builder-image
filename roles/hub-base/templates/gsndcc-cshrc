@@ -1,0 +1,33 @@
+# The StandardCshrc works for both csh and tcsh shells,
+# and defines a basic path which points to standard OS
+# commands, and then adds in paths and environment setup
+# for optional commands in the /opt directory.
+#
+# This is the basic cshrc and tcshrc startup script, which
+# ought to be sufficient for most users of the epicenter
+# client group.
+#
+# The StandardCshrc does NOT source ~/.cshrc.custom.
+
+foreach StandardCshrc (/ida/local/cshrc)
+    if (-e $StandardCshrc) then
+        set command = "source $StandardCshrc"
+        $command
+        break
+    endif
+end
+
+# Customize the prompt
+
+set myname = `whoami`
+set home   = ~$myname
+if ($myname == root) then
+    set prompt = "${nodename}# "
+else
+    set prompt = "${myname}@${nodename} \!> "
+endif
+
+set path=(. /ida/dcc/bin /ida/dcc/scripts $path)
+source ~/.aliases
+
+setenv SEEDRESP /ida/dcc/response/RESP

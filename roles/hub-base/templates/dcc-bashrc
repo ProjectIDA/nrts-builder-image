@@ -1,0 +1,124 @@
+# ida specific bashrc setup
+# much workneeds to be done to create bash versiobn of cshell env
+
+if [ -d /etc/cloud ]; then
+    export GSN_STORAGE_ROOT=/gsn
+else
+    export GSN_STORAGE_ROOT=/ida
+fi
+
+set -o notify
+set -o noclobber
+set -o ignoreeof
+
+export osname=`uname -s | tr "[A-Z]" "[a-z]"`
+osver=`uname -r | sed 's/-RELEASE//'`
+osver_len=`expr $osver : '[0-9]*\.[0-9]*'`
+osver=`expr substr $osver 1 $osver_len`
+
+export machine=`uname -m`
+export nodename=`uname -n`
+export localprefix=/usr/local
+
+export platform=$osname.$osver.$machine
+
+umask 002
+
+# lets set PATH with pathadd()
+
+pathadd () {
+   if [ -n "$1" ]
+   then
+      if [ "$2" = "force" ] ; then
+          PATH=$1:$PATH
+      elif [ "$2" = "forceafter" ] ; then
+          PATH=$PATH:$1
+      else
+          if [ -f /bin/egrep ]; then
+             grepcmd=/bin/egrep
+          elif [ -f /usr/bin/grep ]; then
+             grepcmd=/usr/bin/egrep
+          fi
+
+          if [ -n "$grepcmd" ]; then
+             if ! echo $PATH | $grepcmd -q "(^|:)$1($|:)" ; then
+                if [ "$2" = "after" ] ; then
+                   PATH=$PATH:$1
+                else
+                   PATH=$1:$PATH
+                fi
+             fi
+          else
+             echo "PATHADD: grep command not found"
+          fi
+      fi
+   fi
+}
+
+# Default applications
+
+# Common enviroment variables
+
+# if (! $?PAGER)    setenv PAGER more
+if [ ! $EDITOR ]; then export EDITOR=vim; fi
+if [ ! $NRTS_HOME ]; then export NRTS_HOME=/usr/nrts; fi
+# if empty set MANPATH to dirs set by /etc/man.config
+# this is because the passcal setup script will this but not add the system dirs
+# and the antelope setup script will then not add then when it adds it's own dirs
+if [ ! $MANPATH ]; then export MANPATH=`man -w`; fi
+
+
+export IDA_ARCHIVE_DIR=${GSN_STORAGE_ROOT}/archive
+export IDA_ARCHIVE_RAW_DIR=${GSN_STORAGE_ROOT}/archive/raw
+export IDA_ARCHIVE_MS_DIR=${GSN_STORAGE_ROOT}/archive/ms
+export IDA_ARCHIVE_DMC_DIR=${GSN_STORAGE_ROOT}/archive/dmc
+export IDA_QC_TMP_DIR=${GSN_STORAGE_ROOT}/tmp
+export IDA_CAL_RAW_DIR=${GSN_STORAGE_ROOT}/cal/raw
+export IDA_CAL_SHAKETABLE_DIR=${GSN_STORAGE_ROOT}/cal/shaketable_tests
+export IDA_CAL_ABS_SITEDATA_DIR=${GSN_STORAGE_ROOT}/cal/onsite_caltests
+export IDA_CAL_ANALYSIS_DIR=${GSN_STORAGE_ROOT}/cal/analysis
+export IDA_RESPONSES_CUR_DIR=${GSN_STORAGE_ROOT}/dcc/db/sensors
+export IDA_RESPONSES_NOM_DIR=${GSN_STORAGE_ROOT}/dcc/response/NOMINAL_RESPONSES
+export IDA_DATASCOPEDB_DIR=${GSN_STORAGE_ROOT}/dcc/db
+export IDA_NON_DMC_DATASCOPEDB_DIR=${GSN_STORAGE_ROOT}/dcc/db-non-dmc
+export IDA_SRC_INCLUDE=~/src/include
+export IDA_WEB_ROOT=${GSN_STORAGE_ROOT}/web
+export IDA_DCC_LOG_DIR=${GSN_STORAGE_ROOT}/log
+export IDA_ATE_REPORT_DIR=${GSN_STORAGE_ROOT}/eng/system_tests/ate_reports
+export IDA_STATIONXML_OUTPUT_DIR=${GSN_STORAGE_ROOT}/dcc/StationXML
+
+export SEEDRESP=${GSN_STORAGE_ROOT}/dcc/response/RESP
+
+export PYTHONPATH=/usr/local/modules-py
+
+unset LD_LIBRARY_PATH
+
+
+# Load local software setups
+#
+# NEED o put sroucing of BASH setup scripts here to match tcsh cshrc startup file
+
+# add additional paths AFTER antelope paths set to override them
+rcfiles=""
+rcfiles=$rcfiles" /opt/antelope/setup.sh"
+
+for rcfile in ${rcfiles}
+do
+    if [ -f $rcfile ] ; then
+       source $rcfile
+    fi
+done
+
+# beware: DON'T LET antelope startup put it's Python before this one
+
+pathadd /usr/bin force
+pathadd /bin force
+pathadd $localprefix/scripts
+pathadd $localprefix/bin force
+pathadd $localprefix/MATLAB/R2021a/bin force
+pathadd $GSN_STORAGE_ROOT/dcc/bin after
+pathadd $GSN_STORAGE_ROOT/local/scripts after
+pathadd $GSN_STORAGE_ROOT/eng/scripts after
+
+# add Antelop shared libs to LD_LIBRAY_PATH
+export LD_LIBRARY_PATH=$ANTELOPE/lib
