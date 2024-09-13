@@ -175,12 +175,13 @@
   tags:
     - usermods
 
+# NOTE: put gsndcc user in nrts group for file permissions on S3 FGW storage (/gsn)
 - name: Create LOCAL user gsndcc
   ansible.builtin.user:
     name: gsndcc
     # local: yes
     uid: 4001
-    group: gsndcc
+    group: nrts
     home: "{{ gsndcc_home_dir }}"
     shell: /usr/bin/tcsh
     password: '$6$iVMYfXaSisiDTAlL$0AJdchSr83nuP28JCrKsnoJrcCnDORJRxcKnu6ccYycsn3b2AG7EMPJRZPTX7OmgkyJRfz6S5f14kRKyQSxSM1'
@@ -272,11 +273,11 @@
     enabled: yes
   become: true
 
-- name: build nrts software
+- name: build NRTS software
   import_tasks: nrtsbuild.yml
   vars:
     build_root: "{{ nrts_home_dir }}"
-    deploy_root: "{{ nrts_home_dir }}"
+    deploy_root: "{{ nrts_home_dir if hub_personality == 'nrts' else '/usr/local' }}"
     hub_personality: "{{ hub_personality }}"
   become: true
   tags:
@@ -285,10 +286,8 @@
 - name: build/deploy DCC software
   import_tasks: dccbuild.yml
   vars:
-    # build_root: "{{ nrts_home_dir }}"
     deploy_root: "/usr/local"
-    hub_personality: "{{ hub_personality }}"
-  # when: hub_personality == "dcc"
+  when: hub_personality == "dcc"
   become: true
   tags:
     dccbuild
