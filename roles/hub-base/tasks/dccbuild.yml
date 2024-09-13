@@ -3,7 +3,7 @@
   # git cloing into an existing directory. nrs puts scripts in /usr/local/scripts also.
   ansible.builtin.git:
     repo: "https://github.com/projectida/{{ item }}.git"
-    dest: "{{ deploy_root }}/src/{{ item }}"
+    dest: "{{ deploy_root }}/src/{{ item }}/"
     accept_hostkey: yes
   become: yes
   # become_user: nrts

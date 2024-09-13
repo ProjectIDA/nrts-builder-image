@@ -72,9 +72,9 @@ if ($osname == linux) then
    pathadd $localprefix/scripts
    pathadd ${GSN_STORAGE_ROOT}/local/bin after
    pathadd ${GSN_STORAGE_ROOT}/dcc/scripts after
-   pathadd ${GSN_STORAGE_ROOT}/eng/scripts after
-   pathadd $localprefix/MATLAB/R2021a/bin force
-   pathadd $localprefix/geotool/bin
+#    pathadd ${GSN_STORAGE_ROOT}/eng/scripts after
+#    pathadd $localprefix/MATLAB/R2021a/bin force
+#    pathadd $localprefix/geotool/bin
 
    # set run-time library path to Antelope shared libs
 #    setenv LD_LIBRARY_PATH $ANTELOPE/lib
