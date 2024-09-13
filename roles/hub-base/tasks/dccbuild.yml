@@ -1,13 +1,22 @@
 - name: get DCC source repositories
+  # put in /usr/local/src and then copy to /usr/local/scripts so dont have to worry about 
+  # git cloing into an existing directory. nrs puts scripts in /usr/local/scripts also.
   ansible.builtin.git:
     repo: "https://github.com/projectida/{{ item.repo }}.git"
-    dest: "{{ deploy_root }}/{{ item.target }}"
+    dest: "{{ deploy_root }}/src/{{ item.repo }}"
     accept_hostkey: yes
   become: yes
   # become_user: nrts
+  loop:
+    - dcc-scripts
+    - dcc-modules-py
+  tags:
+    - dccbuild
+
+- name: move DCC scripts nad py modules into place
+  ansible.builtin.command: cp -p {{ deploy_root }}/src/{{ item.repo }} {{ deploy_root }}/{{ item.target }}/
   loop:
     - { repo: dcc-scripts, target: scripts }
     - { repo: dcc-modules-py, target: modules-py }
   tags:
     - dccbuild
-
