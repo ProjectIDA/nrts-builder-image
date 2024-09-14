@@ -17,9 +17,9 @@
   ansible.builtin.file:
     state: directory 
     path: "/usr/local/{{ item }}/"
-    loop:
-      - scripts
-      - modules-py
+  loop:
+    - scripts
+    - modules-py
   become: yes
 
 - name: move DCC scripts nad py modules into place
