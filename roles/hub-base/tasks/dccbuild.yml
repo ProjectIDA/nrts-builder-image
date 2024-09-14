@@ -24,11 +24,11 @@
   tags:
     - dccbuild
 
-- name: move DCC scripts nad py modules into place
-  ansible.builtin.command: cp -pr {{ deploy_root }}/src/{{ item.repo }}/* {{ deploy_root }}/{{ item.target }}/
-  loop:
-    - { repo: dcc-scripts, target: scripts }
-    - { repo: dcc-modules-py, target: modules-py }
-  become: yes
-  tags:
-    - dccbuild
+# - name: move DCC scripts nad py modules into place
+#   ansible.builtin.command: cp -pr {{ deploy_root }}/src/{{ item.repo }}/* {{ deploy_root }}/{{ item.target }}/
+#   loop:
+#     - { repo: dcc-scripts, target: scripts }
+#     - { repo: dcc-modules-py, target: modules-py }
+#   become: yes
+#   tags:
+#     - dccbuild
