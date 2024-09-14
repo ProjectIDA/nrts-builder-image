@@ -21,6 +21,8 @@
     - scripts
     - modules-py
   become: yes
+  tags:
+    - dccbuild
 
 - name: move DCC scripts nad py modules into place
   ansible.builtin.command: cp -pr {{ deploy_root }}/src/{{ item.repo }}/* {{ deploy_root }}/{{ item.target }}/
