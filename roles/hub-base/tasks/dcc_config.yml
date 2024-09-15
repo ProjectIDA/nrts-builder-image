@@ -19,7 +19,7 @@
 
 - name: deploy path_add.csh
   ansible.builtin.copy:
-    remote: false
+    remote_src: false
     src: ../templates/pathadd.csh
     dest: /usr/local/pathadd.csh
     mode: 775
@@ -28,7 +28,7 @@
 
 - name: deploy IDA/GSN cshrc startup file
   ansible.builtin.copy:
-    remote: false
+    remote_src: false
     src: ../templates/dcc-cshrc
     dest: /etc/cshrc
     backup: yes
@@ -36,7 +36,7 @@
 
 - name: deploy IDA/GSN bash startup file
   ansible.builtin.copy:
-    remote: false
+    remote_src: false
     src: ../templates/dcc-bashrc
     dest: /etc/bashrc
     backup: yes
@@ -44,7 +44,7 @@
 
 - name: deploy aliases for user gsndcc
   ansible.builtin.copy:
-    remote: false
+    remote_src: false
     src: ../templates/gsndcc-aliases
     dest: ~/.aliases
     backup: yes
@@ -55,7 +55,7 @@
 ### PROBABLY DON'T NEED THESE as NRTS repo build.csh has environment built in
 - name: deploy IDA/GSN dev startup files
   ansible.builtin.copy:
-    remote: false
+    remote_src: false
     src: "../templates/dcc-{{ item }}"
     dest: "/usr/local/{{ item }}"
     backup: yes
