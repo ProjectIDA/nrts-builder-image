@@ -1,12 +1,36 @@
+- name: make sure build/stage dir exists
+  ansible.builtin.file:
+    path: "{{ deploy_root }}/src/{{ item }}"
+    recurse: true
+    state: directory
+    owner: gsndcc
+    group: gsndcc
+    mode: 0755
+  become: true
+  loop:
+    - dcc-scripts
+    - dcc-modules-py
+
+
+# NOTE: ansibe does not add another directory level using the repo name, 
+#       it just puts repo contaents in dir specified
+# - name: get NRTS source repository
+#   ansible.builtin.git:
+#     repo: https://github.com/projectida/nrts-src.git
+#     dest: "{{ build_root }}/build/nrts/nrts-src"
+#     accept_hostkey: yes
+#   become: yes
+#   become_user: nrts
+
 - name: get DCC source repositories
   # put in /usr/local/src and then copy to /usr/local/scripts so dont have to worry about 
-  # git cloing into an existing directory. nrs puts scripts in /usr/local/scripts also.
+  # git cloing into an existing directory. nrts puts scripts in /usr/local/scripts also.
   ansible.builtin.git:
     repo: "https://github.com/projectida/{{ item }}.git"
-    dest: "{{ deploy_root }}/src/{{ item }}/"
+    dest: "{{ deploy_root }}/src/{{ item }}"
     accept_hostkey: yes
   become: yes
-  # become_user: nrts
+  become_user: gsndcc
   loop:
     - dcc-scripts
     - dcc-modules-py
