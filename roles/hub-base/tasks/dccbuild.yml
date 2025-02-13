@@ -34,6 +34,7 @@
   loop:
     - dcc-scripts
     - dcc-modules-py
+    - mustango
   tags:
     - dccbuild
 
@@ -57,3 +58,201 @@
   become: yes
   tags:
     - dccbuild
+
+- name: move mustango into bin dir
+  ansible.builtin.copy:
+    remote_src: true
+    src: "{{ deploy_root }}/src/mustango/mustango"
+    dest: "{{ deploy_root }}/bin/"
+    
+
+- name: install Python modules
+  pip:
+    executable: "{{ pip_executable_target }}"
+    extra_args: "--no-cache-dir"
+    name: 
+        # - dynd # skip for now
+      - awscli
+      - backcall
+      - beautifulsoup4
+      - boto3
+      - botocore
+      - certifi
+      - cffi
+      - chardet
+      - colorama
+      - cryptography
+      - cycler
+      - dask
+      - decorator
+      - docutils
+      - fabulous
+      - future
+      - gitdb2
+      - GitPython
+      - idna
+      - importlib-metadata
+      - jedi
+      - Jinja2
+      - jmespath
+      - kiwisolver
+      - lxml
+      - MarkupSafe
+      - matplotlib
+      - mseedindex
+      - mseedlib
+      - numexpr
+      - numpy
+      - obspy
+      - pandas
+      - parso
+      - path.py
+      - pexpect
+      - pickleshare
+      - prompt-toolkit
+      - ptyprocess
+      - pyasn1
+      - pycparser
+      - pycurl
+      - pyflakes
+      - Pygments
+      - pyparsing
+      - python-dateutil
+      - pytz
+      - PyYAML
+      - requests
+      - rsa
+      - ruamel.yaml
+      - Rx
+      - scipy
+      - setuptools
+      # - six
+      - smmap2
+      - soupsieve
+      - tables
+      - toolz
+      - traitlets
+      - urllib3
+      - wcwidth
+      - wheel
+      - zipp
+
+
+        # - basemap
+        # - path.py
+        # - ruamel-yaml
+        # - alabaster
+        # - argcomplete
+        # - argh
+        # - astropy
+        # - awscli
+        # - Bottleneck
+        # - Babel
+        # - beautifulsoup4
+        # - bitarray
+        # - blaze
+        # - bokeh
+        # - boto
+        # - botocore
+        # - cffi
+        # - chest
+        # - cloudpickle
+        # - clyent
+        # - colorama
+        # - configobj
+        # - cryptography
+        # - Cython
+        # - cytoolz
+        # - datashape
+        # - dill
+        # - docutils
+        # - et-xmlfile
+        # - fabulous
+        # - fastcache
+        # - flake8
+        # - Flask
+        # - Flask-Cors
+        # - gevent
+        # - gitdb2
+        # - GitPython
+        # - greenlet
+        # - h5py
+        # - HeapDict
+        # - itsdangerous
+        # - jdcal
+        # - jedi
+        # - Jinja2
+        # - jmespath
+        # - jsonschema
+        # - llvmlite
+        # - locket
+        # - MarkupSafe
+        # - mccabe
+        # - mistune
+        # - mpmath
+        # - multipledispatch
+        # - nbconvert
+        # - nbformat
+        # - networkx
+        # - nltk
+        # - nose
+        # - notebook
+        # - numba
+        # - numexpr
+        # - odo
+        # - openpyxl
+        # - pandas
+        # - partd
+        # - pathtools
+        # - patsy
+        # - pep8
+        # - pexpect
+        # - pick
+        # - pickleshare
+        # - Pillow
+        # - ply
+        # - psutil
+        # - ptyprocess
+        # - py
+        # - pyasn1
+        # - pycosat
+        # - pycparser
+        # - pycrypto
+        # - pyflakes
+        # - Pygments
+        # - pyOpenSSL
+        # - pyproj
+        # - pytest
+        # - pytz
+        # - pyweed
+        # - PyYAML
+        # - pyzmq
+        # - rope-py3k
+        # - rsa
+        # - simplegeneric
+        # - singledispatch
+        # - snowballstemmer
+        # - sockjs-tornado
+        # - Sphinx
+        # - sphinx-rtd-theme
+        # - spyder
+        # - statsmodels
+        # - sympy
+        # - terminado
+        # - tornado
+        # - traitlets
+        # - unicodecsv
+        # - Werkzeug
+        # - xlrd
+        # - XlsxWriter
+        # - xlwt
+  tags:
+    - python
+  become: true
+
+
+
+### TODO : Install AWS CLI
+# curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+# unzip awscliv2.zip
+# sudo ./aws/install

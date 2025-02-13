@@ -286,6 +286,7 @@
   import_tasks: dccbuild.yml
   vars:
     deploy_root: "/usr/local"
+    pip_executable_Target: "/usr/bin/pip3"
   when: hub_personality == "dcc"
   become: true
   tags:

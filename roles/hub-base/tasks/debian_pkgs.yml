@@ -27,11 +27,14 @@
     - manpages-posix
     - libncurses-dev
     - net-tools
+    - nfs-common
     - ntp
     - snmp
     - openssh-client
     - openssh-server
     - plocate
+    - python3-pyqt5
+    - python3-tk
     - rsyslog
     - tcsh
     - tree

@@ -19,39 +19,19 @@
     - { url: "https://github.com/iris-edu/msi/archive/v3.8.tar.gz" }
     - { url: "https://github.com/iris-edu/ringserver/archive/v2020.075.tar.gz" }
     - { url: "https://github.com/iris-edu/slinktool/archive/v4.3.tar.gz" }
+    - { url: "https://github.com/iris-edu/miniseed2dmc/archive/refs/tags/v2017.017.tar.gz" }
+    - { url: "http://ds.iris.edu/pub/programs/podv5.6.tar.gz" }
+    - { url: "https://github.com/iris-edu-legacy/rdseed/archive/refs/tags/v5.3.1.tar.gz" }
+
+    ### NOTE: Code for POD and RDSEED needs to be pulled from GSN repo after code changes
+    ### that were required to build & run on Amazxon Linux 2023 (host GSNDCC).
+
   # become_user: nrts
   become: true
   tags:
     - miniseed
 
 
-# - name: download miniseed/ringserver utilities from github.com
-#   get_url:
-#     url: "{{ item.url }}"
-#     dest: "{{ build_root }}/{{ item.dest }}"
-#   loop:
-#     - {url: "https://github.com/iris-edu/dataselect/archive/v3.22.tar.gz", dest: "v3.22.tar.gz"}
-#     - {url: "https://github.com/iris-edu/msi/archive/v3.8.tar.gz", dest: "v3.8.tar.gz"}
-#     - {url: "https://github.com/iris-edu/ringserver/archive/v2020.075.tar.gz", dest: "v2020.075.tar.gz"}
-#     - {url: "https://github.com/iris-edu/slinktool/archive/v4.3.tar.gz", dest: "v4.3.tar.gz"}
-#   become: true
-#   tags:
-#     - miniseed
-    
-# - name: uncompress miniseed/ringserver source
-#   unarchive:
-#     remote_src: yes
-#     src: "{{ build_root }}/{{ item }}"
-#     dest: "{{ build_root }}/"
-#   loop:
-#     - "v3.22.tar.gz"
-#     - "v3.8.tar.gz"
-#     - "v2020.075.tar.gz"
-#     - "v4.3.tar.gz"
-#   become: true
-#   tags:
-#     - miniseed
-    
 - name: build miniseed/ringserver utils
   community.general.make:
     chdir: "{{ build_root }}/{{ item.dir }}"
@@ -63,6 +43,7 @@
     - { dir: slinktool-4.3/libslink }
     - { dir: slinktool-4.3/ezxml }
     - { dir: slinktool-4.3 }
+    - { dir: "miniseed2dmc-2017.017"}
   become: true
   tags:
     - miniseed
@@ -76,8 +57,38 @@
     - "{{ build_root }}/msi-3.8/msi"
     - "{{ build_root }}/ringserver-2020.075/ringserver"
     - "{{ build_root }}/slinktool-4.3/slinktool"
+    - "{{ build_root }}/miniseed2dmc-2017.017/miniseed2dmc"
   tags:
     - miniseed
+
+###### pod section #########################
+- name: pod ==> copy over modified globals.h andmain.c to avoid gcc10+ multiple declaration errors
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: "pod5.6.1/globals.h", dest: "{{ build_root }}/5.6/Include/" }
+    - { src: "pod5.6.1/main.c", dest: "{{ build_root }}/5.6/Main/" }
+  tags:
+    - miniseed
+  become: true
+
+- name: pod ==>make pod from IRIS
+  community.general.make:
+    cd "{{ build_root }}/5.6"
+  tags:
+    - miniseed
+  become: true
+
+- name: pod ==>install pod
+  shell: |
+    install -o root -g root -m 755 {{ item }} {{ deploy_root }}
+  loop:
+    - "{{ build_root }}/5.6/pod"
+  tags:
+    - miniseed
+  become: true
+  
 
 #################################
 # SLINKTOOL special build sequence

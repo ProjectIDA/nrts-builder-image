@@ -7,13 +7,6 @@
   become: yes
   become_user: gsndcc
 
-# - name: deploy hosts
-#   template:
-#     src: dcc_hosts
-#     dest: /etc/hosts
-#     backup: yes
-#   become: true
-
 - name: append GSN hosts to /etc/hosts
   lineinfile: path=/etc/hosts line={{lookup('file', '../templates/dcc-hosts')}} create=yes state=present
 
@@ -26,42 +19,42 @@
     backup: yes
   become: true
 
-- name: deploy IDA/GSN cshrc startup file
+- name: use gsndcc .cshrc for user nrts also (just on GSNDCC)
   ansible.builtin.copy:
     remote_src: false
-    src: ../templates/dcc-cshrc
-    dest: /etc/cshrc
+    src: ../templates/gsndcc-cshrc
+    dest: "~/.cshrc"
+    mode: 664
     backup: yes
   become: true
+  become_user: nrts
 
-- name: deploy IDA/GSN bash startup file
+##########################################
+### NEED TO MOVE TO A 'config' SCRIPT for management, like nrts-config
+- name: deploy IDA/GSN user gsndcc startup files
   ansible.builtin.copy:
     remote_src: false
-    src: ../templates/dcc-bashrc
-    dest: /etc/bashrc
+    src: "../templates/{{ item.src }}"
+    dest: "~/{{ item.dest }}"
     backup: yes
-  become: true
-
-- name: deploy aliases for user gsndcc
-  ansible.builtin.copy:
-    remote_src: false
-    src: ../templates/gsndcc-aliases
-    dest: ~/.aliases
-    backup: yes
+  loop:
+    - { src: gsndcc-aliases, dest: .aliases }
+    - { src: gsndcc-cshrc, dest: .cshrc }
   become: true
   become_user: gsndcc
 
-##########################################
-### PROBABLY DON'T NEED THESE as NRTS repo build.csh has environment built in
-- name: deploy IDA/GSN dev startup files
+
+- name: deploy IDA/GSN system startup files
   ansible.builtin.copy:
     remote_src: false
-    src: "../templates/dcc-{{ item }}"
-    dest: "/usr/local/{{ item }}"
+    src: "../templates/{{ item.src }}"
+    dest: "/usr/local/{{ item.dest }}"
     backup: yes
   loop:
-    - devenv.csh
-    - devenv.sh
+    - { src: dcc-bashrc, dest: bashrc }
+    - { src: dcc-cshrc, dest: cshrc }
+    - { src: dcc-devenv.csh, dest: devenv.csh }
+    - { src: dcc-devenv.sh, dest: devenv.sh }
   become: true
 ##########################################
 

@@ -91,7 +91,7 @@
     - { src: platform,  dest: .platform }
     - { src: vimrc,     dest: .vimrc }
   # become_method: su
-  when: hub_personality == "nrts"
+  # when: hub_personality == "nrts"
   become_user: nrts
   become: yes
 
@@ -100,7 +100,7 @@
     path: "{{ deploy_root }}/envrc"
     regexp: '^\b(setenv +NRTS_HOME)[^\n]*$'
     replace: '\1 {{ deploy_root }}'
-  when: hub_personality == "nrts"
+  # when: hub_personality == "nrts"
   become_user: nrts
   become: yes
   # vars:
@@ -108,7 +108,7 @@
 
 - name: rename envrc to .envrc
   command: mv {{ deploy_root }}/envrc {{ deploy_root }}/.envrc
-  when: hub_personality == "nrts"
+  # when: hub_personality == "nrts"
   become_user: nrts
   become: yes
   # vars:
