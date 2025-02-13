@@ -77,7 +77,7 @@ if ($osname == linux) then
 #    pathadd $localprefix/geotool/bin
 
    # set run-time library path to Antelope shared libs
-#    setenv LD_LIBRARY_PATH $ANTELOPE/lib
+   setenv LD_LIBRARY_PATH $ANTELOPE/lib
 
 else if ($osname == darwin) then
 

@@ -1,3 +1,5 @@
+#!/bin/tcsh
+
 # The StandardCshrc works for both csh and tcsh shells,
 # and defines a basic path which points to standard OS
 # commands, and then adds in paths and environment setup
