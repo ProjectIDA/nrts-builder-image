@@ -30,7 +30,7 @@
     dest: "{{ deploy_root }}/src/{{ item }}"
     accept_hostkey: yes
   become: yes
-  become_user: gsndcc
+  # become_user: gsndcc
   loop:
     - dcc-scripts
     - dcc-modules-py
